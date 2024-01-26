@@ -14,11 +14,8 @@ public struct LectureData
 
     public ELectureGrade TargetGrade => _targetGrade;
 
-    public int Credit => _credit;
-    
     [JsonProperty("lecture_id")] private int _id;
     [JsonProperty("lecture_name")] private string _name;
     [JsonProperty("lecture_type")] private ELectureType _type;
     [JsonProperty("rec_grade")] private ELectureGrade _targetGrade;
-    [JsonProperty("credit")] private int _credit;
 }
