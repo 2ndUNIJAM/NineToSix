@@ -9,13 +9,26 @@ public enum ELectureType // 다른 파일에서도 써야됨
     MajorRequired // 전공필수 
 }
 
-
-public struct Lecture
+[System.Flags]
+public enum ELectureGrade
 {
-    [SerializeField] string lectureName;
-    public int lectureId;
-    public ELectureType lectureType;
-    public int[] lectureGrade;
+    First = 1,
+    Second = 2,
+    Third = 4,
+    Fourth = 8
+}
+
+
+public class Lecture
+{
+    public LectureData Data => _data;
+
+    public int Credit => _credit;
+
+    public int Rating => _rating;
+
+    public IEnumerable<Vector2Int> Schedule => _schedule;
+    
     public int credit; // 학점
     public int profRating; // 0~5 사이의 0.5 간격 랜덤
 
@@ -24,4 +37,21 @@ public struct Lecture
 
     // Implement: 들을 수 있는 학년 변수
 
+    private int _credit, _rating;
+    private LectureData _data;
+    private List<Vector2Int> _schedule;
+
+    public Lecture(LectureData data)
+    {
+        _data = data;
+        
+        // Credit, Rating 랜덤 생성
+        // Credit은 교양일 때만 1~3, 전기/전필시 무조건 3
+        if (_data.Type == ELectureType.LiberalArt)
+            _credit = Random.Range(1, 4);
+        else
+            _credit = 3;
+        
+        
+    }
 }

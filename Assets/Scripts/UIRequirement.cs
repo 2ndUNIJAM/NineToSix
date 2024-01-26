@@ -9,16 +9,11 @@ public class UIRequirement : MonoBehaviour
     [SerializeField] private Image backImage;
     [SerializeField] private Text textLabel;
     [SerializeField] private GameObject completedCheck;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public void Initialize(string requirementKey)
     {
         
     }
+    
+    
 }
