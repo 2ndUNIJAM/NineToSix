@@ -17,13 +17,13 @@ public class GameManager : MonoBehaviour
                 _instance = singleton.GetComponent<GameManager>();
                 DontDestroyOnLoad(singleton);
             }
-            
+
             return _instance;
         }
     }
-    
+
     private static GameManager _instance;
-    
+
     /// <summary>
     /// 씬 전환이 요청되었을 때 호출됩니다. 실제 씬 전환 시작까지의 딜레이(초 단위)가 매개변수로 전달됩니다.
     /// </summary>
@@ -38,12 +38,12 @@ public class GameManager : MonoBehaviour
     /// 씬 전환이 완료되었을 때 호출됩니다.
     /// </summary>
     public event Action SceneChangeFinished;
-    
+
     private string _currentScene;
     private Stack<string> _sceneHistory;
-    
+
     private const float SceneChangeDelay = 0.5f;
-    
+
     private void Awake()
     {
         if (!_instance)
@@ -56,20 +56,22 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        _sceneHistory = new Stack<string>();
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
-    
+
     /// <summary>
     /// 지정된 씬으로 전환합니다. 이전 씬이 씬 기록에 추가됩니다.
     /// </summary>
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
         _currentScene = _sceneHistory.Pop();
         ChangeSceneAsync(_currentScene).Forget();
     }
-    
+
     private async UniTaskVoid ChangeSceneAsync(string nextScene)
     {
         SceneChangeStarted?.Invoke(SceneChangeDelay);
