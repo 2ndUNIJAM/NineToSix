@@ -6,12 +6,12 @@ using UnityEngine;
 public abstract class RequirementBase : MonoBehaviour
 {
     [SerializeField] protected string contentTitle;
-    [SerializeField] protected GameLogicManager gameLogicManager;
+    [SerializeField] protected GameLogicManager gLogicManager;
     public abstract bool DoesMeetRequirement();
     public void GetLogicManager()
     {
         GameObject gLogicManagerObj = GameObject.Find("GameLogicManager");
-        gameLogicManager = gLogicManagerObj.GetComponent<GameLogicManager>();
+        gLogicManager = gLogicManagerObj.GetComponent<GameLogicManager>();
     }
 
 }

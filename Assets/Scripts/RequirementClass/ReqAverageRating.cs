@@ -20,7 +20,7 @@ public class ReqAverageRating : RequirementBase
     {
         // ★★Implement: GameManager 업데이트 후 currentStudent 받아오는거 변경 필수 안 그럼 에러 발생 
         Student currentStudent = new Student();
-        gameLogicManager.GetCurrentStudent(currentStudent);
+        gLogicManager.GetCurrentStudent(currentStudent);
 
         List<Lecture> finalLectures = new List<Lecture>();
         currentStudent.GetCurrentLectures(finalLectures);

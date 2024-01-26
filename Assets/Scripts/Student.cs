@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Student : MonoBehaviour
+public class Student
 {
     string studentName; // 한글 최대 6글자
     int grade; // 학년
@@ -20,19 +20,9 @@ public class Student : MonoBehaviour
     {
         lectureList = currentLectures;
     }
-/*    public int GetCurrentLecturesNum()
-    {
-        return currentLectures.Count;
-    }
 
-    public int GetCurrentLecturesCredits() // 현재 담은 과목 학점 총합 반환
-    {
-        int currentCredits = 0;
-        foreach(Lecture lecture in currentLectures)
-        {
-            currentCredits += lecture.credit;
-        }
+    public string GetStudentName() { return studentName; }
+    public int GetStudentGrade() { return grade; }
+    public int GetStudentMaxCredit() {  return maxCredit; } 
 
-        return currentCredits;
-    }*/
 }

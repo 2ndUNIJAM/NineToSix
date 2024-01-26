@@ -14,32 +14,31 @@ public class ReqLectureNumber : RequirementBase
     {
         base.GetLogicManager();
 
-
         reqLectureType = (ELectureType)Random.Range(0, 3); // 0 1 2 랜덤 생성
         string type = string.Empty;
         switch((int)reqLectureType)
         {
             case 0:
-                type = "전공필수";
+                type = "교양";
                 break;
             case 1:
                 type = "전공기초";
                 break;
             case 2:
-                type = "교양";
+                type = "전공필수";
                 break;
             default:
                 break;
         }
         reqNumLectures = Random.Range(1, 3);
-        contentTitle = string.Format("{0} {1} 과목 필수 수강신청",type, reqNumLectures);
+        contentTitle = string.Format("{0} {1} 과목 필수 신청",type, reqNumLectures);
     }
 
     override public bool DoesMeetRequirement() 
     {
         // ★★Implement: GameManager 업데이트 후 currentStudent 받아오는거 변경 필수 안 그럼 에러 발생 
         Student currentStudent = new Student();
-        gameLogicManager.GetCurrentStudent(currentStudent);
+        gLogicManager.GetCurrentStudent(currentStudent);
 
         List<Lecture> finalLectures = new List<Lecture>();
         currentStudent.GetCurrentLectures(finalLectures);       

@@ -4,15 +4,18 @@ using UnityEngine;
 
 public enum ELectureType // 다른 파일에서도 써야됨
 {
-    MajorRequired, // 전공필수 
+    LiberalArt, // 교양
     MajorBasic, // 전공기초
-    LiberalArt // 교양
+    MajorRequired // 전공필수 
 }
 
-public class Lecture : MonoBehaviour
+
+public struct Lecture
 {
     [SerializeField] string lectureName;
+    public int lectureId;
     public ELectureType lectureType;
+    public int[] lectureGrade;
     public int credit; // 학점
     public int profRating; // 0~5 사이의 0.5 간격 랜덤
 
