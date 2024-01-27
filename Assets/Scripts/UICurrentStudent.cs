@@ -15,6 +15,7 @@ public class UICurrentStudent : MonoBehaviour
 
     public void SetStudent(Student student)
     {
+        studentImage.sprite = student.GetStudentProfile();
         studentName.text = student.GetStudentName();
         studentDept.text = $"{student.GetStudentDepartment()} {student.GetStudentGrade()}학년";
         maxCredit.text = $"수강가능학점 : {student.GetStudentMaxCredit()}";

@@ -10,6 +10,7 @@ public class Student
     int studentID;
     int grade; // 학년
     int maxCredit; // 18 19 20 21 중 랜덤
+    Sprite profile; // 프로필사진
     List<Lecture> currentLectures; //
     RequirementBase[] requirements; // 요구사항 3개 고정, 필수 2개 선택 1개
 
@@ -20,6 +21,7 @@ public class Student
         grade = Random.Range(1, 5);
         maxCredit = Random.Range(18, 22);
         currentLectures = new List<Lecture>();
+        profile = Resources.Load<Sprite>("profile_" + (id < 5 ? id.ToString() : "default"));
         GenerateRequirements();
     }
 
@@ -53,6 +55,7 @@ public class Student
     public int GetStudentID() { return studentID; }
     public int GetStudentGrade() { return grade; }
     public int GetStudentMaxCredit() { return maxCredit; }
+    public Sprite GetStudentProfile() { return profile; }
 
     public RequirementBase GetFirstRequirement() { return requirements[0]; }
     public RequirementBase GetSecondRequirement() { return requirements[1]; }

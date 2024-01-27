@@ -1430,6 +1430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec17a3d6174ae44828a972bd57a31528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  studentImage: {fileID: 1008180552}
   studentName: {fileID: 1933542182}
   studentDept: {fileID: 1070087486}
 --- !u!1 &292804364
@@ -1580,6 +1581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec17a3d6174ae44828a972bd57a31528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  studentImage: {fileID: 570091822}
   studentName: {fileID: 921818565}
   studentDept: {fileID: 990057446}
 --- !u!1 &348270968
