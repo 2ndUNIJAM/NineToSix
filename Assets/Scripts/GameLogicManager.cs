@@ -117,6 +117,9 @@ public class GameLogicManager : MonoBehaviour
         schedule.HideLecturePreview();
         _holdingLectureComponent.Remove();
         UnholdLecture();
+
+        // 장바구니의 강의를 드랍했을 경우 -5 
+        UpdateScore(-5);
     }
 
     public async UniTaskVoid TrySelectHoldingLecture()
@@ -133,6 +136,14 @@ public class GameLogicManager : MonoBehaviour
                 _selectedLectures.Add(lecture);
                 _currentCredit += lecture.Credit;
                 _holdingLectureComponent.Remove();
+
+                // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
+                UpdateScore(10);
+            }
+            else
+            {
+                // 과목의 수강신청 확정을 실패했을 경우 -5 
+                UpdateScore(-5);
             }
             UnholdLecture();
             actionDimmer.SetActive(false);
@@ -142,18 +153,48 @@ public class GameLogicManager : MonoBehaviour
 
     public void ConfirmSchedule() // 확정함수
     {
-        // 0. 점수 계산 
+        // 제한시간 내에 실시간 수강신청란의 과목을 제거한 경우 +2 > TODO
+        // 제한시간 내에 실시간 수강신청란의 과목을 제거하지 못한 경우 -3 > TODO
+        // 수강신청 현황란의 강의를 드랍했을 경우 -10 > TODO
+
+
+        // 선택 요청사항을 만족한 상태로 시간표를 확정했을 경우 (식 활용) 
+        int basicScore = 50; // 기본 점수
+        int bonusScore = 35; // 보너스 상수
+        int bonusWeight = 100;// 보너스 가중치
+        float reqWeight = studentList[_activeStudentIndex].GetLastRequirement().DoesMeetRequirement() ? 1.15f : 1; // 요구사항 가중치
+        int confirmScore = (int)((basicScore + bonusWeight * (21 - _currentCredit) / (21 - _currentCredit + bonusScore)) * reqWeight);
+        UpdateScore(confirmScore);
 
 
 
-        // 1. 학생 교체 
-        ++_activeStudentIndex;
-        VisualizeStudent();
 
-        // 2. 시간표 클리어 UISchedule.cs에 ClearSlots
-        schedule.ClearSlots();
+        // 학생의 필수 요청사항을 못 지킨 상태로 시간표를 확정했을 경우 -25 
+        if (!studentList[_activeStudentIndex].GetFirstRequirement().DoesMeetRequirement()
+            || !studentList[_activeStudentIndex].GetSecondRequirement().DoesMeetRequirement())
+            UpdateScore(-25);
 
-        // 3. 수강학점 초기화
-        _currentCredit = 0;
+
+        // 조건: activestudentIndex+1, studentList length  초과 시 게임 종료
+        if(++_activeStudentIndex >= studentList.Count) 
+        {
+            // 게임 종료
+        }
+        else
+        {
+            // 학생 교체 
+            VisualizeStudent();
+
+            // 시간표 클리어 UISchedule.cs에 ClearSlots
+            schedule.ClearSlots();
+
+            // 수강학점 초기화
+            _currentCredit = 0;
+        }
+    }
+
+    void UpdateScore(int score)
+    {
+        _currentScore += score;
     }
 }
