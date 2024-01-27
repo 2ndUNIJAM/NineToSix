@@ -149,7 +149,7 @@ public class GameLogicManager : MonoBehaviour
     {
         var lecture = _holdingLectureComponent.Lecture;
 
-        if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= 18)
+        if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= studentList[_activeStudentIndex].GetStudentMaxCredit())
         {
             _isOnAction = true;
             actionDimmer.SetActive(true);
@@ -221,7 +221,7 @@ public class GameLogicManager : MonoBehaviour
     void AddScore(int score)
     {
         _currentScore += score;
-        this.score.UpdateScore(score);
+        this.score.UpdateScore(_currentScore);
     }
 
     void AddCredit(int credit)
