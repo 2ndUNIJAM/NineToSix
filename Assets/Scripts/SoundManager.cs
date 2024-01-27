@@ -75,6 +75,10 @@ public class SoundManager : MonoBehaviour
         speakers[(int)bgm].GetComponent<AudioSource>().Play();
     }
 
+    public void StopSound(EBGMType bgm)
+    {
+        speakers[(int)bgm].GetComponent<AudioSource>().Stop();
+    }
 
     public bool IsPlaying(EBGMType bgm)
     {
