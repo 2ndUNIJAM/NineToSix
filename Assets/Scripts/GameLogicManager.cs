@@ -102,6 +102,11 @@ public class GameLogicManager : MonoBehaviour
 
     private void VisualizeStudent()
     {
+        Student curStudent = studentList[_activeStudentIndex];
+        curStudent.GetFirstRequirement().OnEnter();
+        curStudent.GetSecondRequirement().OnEnter();
+        curStudent.GetLastRequirement().OnEnter();
+
         currentStudent.SetStudent(studentList[_activeStudentIndex]);
 
         if (_activeStudentIndex + 1 < studentList.Count)
@@ -113,6 +118,7 @@ public class GameLogicManager : MonoBehaviour
             nextStudent2.SetStudent(studentList[_activeStudentIndex + 2]);
         else
             nextStudent2.gameObject.SetActive(false);
+
     }
 
     public IEnumerable<Lecture> GetSelectedLectures()
@@ -192,12 +198,18 @@ public class GameLogicManager : MonoBehaviour
 
     public void ConfirmSchedule() 
     {
-        // 제한시간 내에 실시간 수강신청란의 과목을 제거한 경우 +2 > TODO
-        // 제한시간 내에 실시간 수강신청란의 과목을 제거하지 못한 경우 -3 > TODO
-        // 수강신청 현황란의 강의를 드랍했을 경우 -10 > TODO
-        if (_currentCredit < 15) return; // 15학점 미만인 경우 
+        // 15학점 미만인 경우 예외처리
+        if (_currentCredit < 15) return; 
 
         _confirmCount++;
+
+        if(lectureSpawner.GuaranteedLectureExists)
+        {
+            studentList[_activeStudentIndex].GetFirstRequirement().OnExit();
+            studentList[_activeStudentIndex].GetSecondRequirement().OnExit();
+            studentList[_activeStudentIndex].GetLastRequirement().OnExit();
+        }
+
 
         // 선택 요청사항을 만족한 상태로 시간표를 확정했을 경우 (식 활용) 
         int basicScore = 50; // 기본 점수
@@ -222,7 +234,6 @@ public class GameLogicManager : MonoBehaviour
         {
             SoundManager.Instance.PlaySound(EBGMType.GoodConfirm);
         }
-
 
         // 조건: activestudentIndex+1, studentList length  초과 시 게임 종료
         if (++_activeStudentIndex >= studentList.Count)
