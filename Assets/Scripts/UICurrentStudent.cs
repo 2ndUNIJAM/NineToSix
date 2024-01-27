@@ -22,5 +22,15 @@ public class UICurrentStudent : MonoBehaviour
         requirements[0].SetText(student.GetFirstRequirement().contentTitle);
         requirements[1].SetText(student.GetSecondRequirement().contentTitle);
         requirements[2].SetText(student.GetLastRequirement().contentTitle);
+        requirements[0].CheckBox(false);
+        requirements[1].CheckBox(false);
+        requirements[2].CheckBox(false);
+    }
+
+    public void CheckRequirements(Student student)
+    {
+        requirements[0].CheckBox(student.GetFirstRequirement().DoesMeetRequirement());
+        requirements[1].CheckBox(student.GetSecondRequirement().DoesMeetRequirement());
+        requirements[2].CheckBox(student.GetLastRequirement().DoesMeetRequirement());
     }
 }

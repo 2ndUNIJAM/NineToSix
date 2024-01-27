@@ -136,7 +136,7 @@ public class GameLogicManager : MonoBehaviour
                 _selectedLectures.Add(lecture);
                 _currentCredit += lecture.Credit;
                 _holdingLectureComponent.Remove();
-
+                currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
                 // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
                 UpdateScore(10);
             }

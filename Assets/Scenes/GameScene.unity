@@ -7591,7 +7591,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 50eb636fb11a725439c378934334c06e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8992,7 +8992,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 50eb636fb11a725439c378934334c06e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11806,7 +11806,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 50eb636fb11a725439c378934334c06e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12744,9 +12744,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68c80bc875104c1bb4a3a1d7e434554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backImage: {fileID: 1792227998}
+  check: {fileID: 21300000, guid: 50eb636fb11a725439c378934334c06e, type: 3}
   textLabel: {fileID: 1373090934}
-  completedCheck: {fileID: 1744290696}
+  checkBox: {fileID: 1700157546}
 --- !u!114 &1792227997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13318,9 +13318,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68c80bc875104c1bb4a3a1d7e434554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backImage: {fileID: 1875659940}
+  check: {fileID: 21300000, guid: 50eb636fb11a725439c378934334c06e, type: 3}
   textLabel: {fileID: 715297005}
-  completedCheck: {fileID: 62925921}
+  checkBox: {fileID: 1173236592}
 --- !u!114 &1875659939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14435,9 +14435,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68c80bc875104c1bb4a3a1d7e434554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backImage: {fileID: 2068780048}
+  check: {fileID: 21300000, guid: 50eb636fb11a725439c378934334c06e, type: 3}
   textLabel: {fileID: 113995682}
-  completedCheck: {fileID: 146536555}
+  checkBox: {fileID: 1359583812}
 --- !u!114 &2068780047
 MonoBehaviour:
   m_ObjectHideFlags: 0

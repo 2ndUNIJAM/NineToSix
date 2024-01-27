@@ -6,13 +6,23 @@ using TMPro;
 
 public class UIRequirement : MonoBehaviour
 {
-    // TODO: Requirement 객체 가지기
-    [SerializeField] private Image backImage;
+    [SerializeField] private Sprite check;
     [SerializeField] private TextMeshProUGUI textLabel;
-    [SerializeField] private GameObject completedCheck;
+    [SerializeField] private Image checkBox;
 
     public void SetText(string explain)
     {
         textLabel.text = explain;
+    }
+
+    public void CheckBox(bool satisfy)
+    {
+        if (satisfy)
+        {
+            checkBox.sprite = check;
+            checkBox.type = Image.Type.Simple;
+        }
+        else
+            checkBox.sprite = null;
     }
 }
