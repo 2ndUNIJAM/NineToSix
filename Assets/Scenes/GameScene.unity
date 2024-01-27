@@ -218,6 +218,7 @@ MonoBehaviour:
   lectureBucket: {fileID: 1969709071}
   score: {fileID: 553201572}
   timer: {fileID: 1194682371}
+  credit: {fileID: 1491595021}
   actionDimmer: {fileID: 1100237467}
   rankingData: {fileID: 11400000, guid: 90b28bb898bd82a4d866390c8bc9acfc, type: 2}
 --- !u!4 &33359476
@@ -9606,6 +9607,7 @@ GameObject:
   - component: {fileID: 1491595020}
   - component: {fileID: 1491595019}
   - component: {fileID: 1491595018}
+  - component: {fileID: 1491595021}
   m_Layer: 5
   m_Name: Credit Count
   m_TagString: Untagged
@@ -9749,6 +9751,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1491595016}
   m_CullTransparentMesh: 1
+--- !u!114 &1491595021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1491595016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91bd9fc6c93c1c34bb73f34673759fa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textCredit: {fileID: 1491595019}
 --- !u!1 &1492388052
 GameObject:
   m_ObjectHideFlags: 0
