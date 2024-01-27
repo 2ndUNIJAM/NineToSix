@@ -152,9 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a20b6ae079a3d894a8c6bce8fda71edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStudent: {fileID: 0}
-  nextStudentTemplate: {fileID: 0}
-  nextStudentParent: {fileID: 0}
+  currentStudent: {fileID: 1800584943}
+  nextStudent1: {fileID: 290981257}
+  nextStudent2: {fileID: 304061977}
   schedule: {fileID: 842239507}
   lectureSpawner: {fileID: 2136570348}
   lectureBucket: {fileID: 0}
@@ -1350,6 +1350,7 @@ GameObject:
   - component: {fileID: 290981254}
   - component: {fileID: 290981256}
   - component: {fileID: 290981255}
+  - component: {fileID: 290981257}
   m_Layer: 5
   m_Name: Next Student
   m_TagString: Untagged
@@ -1417,6 +1418,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290981253}
   m_CullTransparentMesh: 1
+--- !u!114 &290981257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290981253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec17a3d6174ae44828a972bd57a31528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  studentName: {fileID: 1933542182}
+  studentDept: {fileID: 1070087486}
 --- !u!1 &292804364
 GameObject:
   m_ObjectHideFlags: 0
@@ -1485,6 +1500,7 @@ GameObject:
   - component: {fileID: 304061974}
   - component: {fileID: 304061976}
   - component: {fileID: 304061975}
+  - component: {fileID: 304061977}
   m_Layer: 5
   m_Name: Next Student (1)
   m_TagString: Untagged
@@ -1552,6 +1568,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304061973}
   m_CullTransparentMesh: 1
+--- !u!114 &304061977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304061973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec17a3d6174ae44828a972bd57a31528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  studentName: {fileID: 921818565}
+  studentDept: {fileID: 990057446}
 --- !u!1 &348270968
 GameObject:
   m_ObjectHideFlags: 0
@@ -4647,6 +4677,7 @@ GameObject:
   - component: {fileID: 897516754}
   - component: {fileID: 897516753}
   - component: {fileID: 897516752}
+  - component: {fileID: 897516755}
   m_Layer: 5
   m_Name: Requirement (1)
   m_TagString: Untagged
@@ -4739,6 +4770,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 897516750}
   m_CullTransparentMesh: 1
+--- !u!114 &897516755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897516750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68c80bc875104c1bb4a3a1d7e434554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backImage: {fileID: 897516753}
+  textLabel: {fileID: 1918839349}
+  completedCheck: {fileID: 153942271}
 --- !u!1 &921818563
 GameObject:
   m_ObjectHideFlags: 0
@@ -5070,7 +5116,7 @@ GameObject:
   - component: {fileID: 951623636}
   - component: {fileID: 951623635}
   m_Layer: 5
-  m_Name: Student Dept (1)
+  m_Name: Max Credit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7906,6 +7952,7 @@ GameObject:
   - component: {fileID: 1317164681}
   - component: {fileID: 1317164680}
   - component: {fileID: 1317164679}
+  - component: {fileID: 1317164682}
   m_Layer: 5
   m_Name: Requirement
   m_TagString: Untagged
@@ -7998,6 +8045,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1317164677}
   m_CullTransparentMesh: 1
+--- !u!114 &1317164682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317164677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68c80bc875104c1bb4a3a1d7e434554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backImage: {fileID: 1317164680}
+  textLabel: {fileID: 1048229612}
+  completedCheck: {fileID: 51800925}
 --- !u!1 &1319744145
 GameObject:
   m_ObjectHideFlags: 0
@@ -8932,7 +8994,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 424314408}
   m_HandleRect: {fileID: 424314407}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9880,6 +9942,7 @@ GameObject:
   - component: {fileID: 1635492490}
   - component: {fileID: 1635492489}
   - component: {fileID: 1635492488}
+  - component: {fileID: 1635492491}
   m_Layer: 5
   m_Name: Requirement (2)
   m_TagString: Untagged
@@ -9972,6 +10035,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635492486}
   m_CullTransparentMesh: 1
+--- !u!114 &1635492491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635492486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68c80bc875104c1bb4a3a1d7e434554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backImage: {fileID: 1635492489}
+  textLabel: {fileID: 1613652795}
+  completedCheck: {fileID: 838236788}
 --- !u!1 &1644136096
 GameObject:
   m_ObjectHideFlags: 0
@@ -11234,6 +11312,7 @@ GameObject:
   - component: {fileID: 1800584942}
   - component: {fileID: 1800584941}
   - component: {fileID: 1800584940}
+  - component: {fileID: 1800584943}
   m_Layer: 5
   m_Name: Current Student
   m_TagString: Untagged
@@ -11320,6 +11399,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1800584938}
   m_CullTransparentMesh: 1
+--- !u!114 &1800584943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800584938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d25a7ddc49e54df488d4877118ecbf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  studentImage: {fileID: 1761115556}
+  studentName: {fileID: 436578844}
+  studentDept: {fileID: 1056453370}
+  maxCredit: {fileID: 951623635}
+  requirements:
+  - {fileID: 1317164682}
+  - {fileID: 897516755}
+  - {fileID: 1635492491}
 --- !u!1 &1834554939
 GameObject:
   m_ObjectHideFlags: 0

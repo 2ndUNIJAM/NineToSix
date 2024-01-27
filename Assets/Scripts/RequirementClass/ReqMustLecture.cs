@@ -12,7 +12,7 @@ public class ReqMustLecture : RequirementBase
     public ReqMustLecture()
     {
         base.GetLogicManager();
-
+        contentTitle = "뒹굴역학 필수 이수";
     }
     public override bool DoesMeetRequirement()
     {

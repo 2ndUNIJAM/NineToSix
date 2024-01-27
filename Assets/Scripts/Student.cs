@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Student
 {
+    const string department = "나태학과";
     string studentName; // 한글 최대 6글자
     int studentID;
     int grade; // 학년
@@ -48,6 +49,7 @@ public class Student
     }
 
     public string GetStudentName() { return studentName; }
+    public string GetStudentDepartment() { return department; }
     public int GetStudentID() { return studentID; }
     public int GetStudentGrade() { return grade; }
     public int GetStudentMaxCredit() { return maxCredit; }

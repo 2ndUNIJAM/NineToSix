@@ -13,16 +13,13 @@ public class GameLogicManager : MonoBehaviour
     public bool IsHoldingLecture => _holdingLectureComponent != null;
 
     [SerializeField] private UICurrentStudent currentStudent;
-    [SerializeField] private UINextStudent nextStudentTemplate;
-    [SerializeField] private RectTransform nextStudentParent;
+    [SerializeField] private UINextStudent nextStudent1, nextStudent2;
     [SerializeField] private UISchedule schedule;
     [SerializeField] private UILectureSpawner lectureSpawner;
     [SerializeField] private UILectureBucket lectureBucket;
 
     List<Student> studentList;
-    private Student _activeStudent;
-    private List<RequirementBase> _requirements;
-    private Queue<Student> _nextStudentQueue;
+    private int _activeStudentIndex;
 
     private UILecture _holdingLectureComponent;
     private GameObject _ghostGraphic;
@@ -46,6 +43,7 @@ public class GameLogicManager : MonoBehaviour
         _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
 
         LoadStudent();
+        VisualizeStudent();
     }
 
     private void LoadStudent()
@@ -57,7 +55,22 @@ public class GameLogicManager : MonoBehaviour
         {
             studentList.Add(new Student(studentNames[i], i));
         }
-        _activeStudent = studentList[0];
+        _activeStudentIndex = 0;
+    }
+
+    private void VisualizeStudent()
+    {
+        currentStudent.SetStudent(studentList[_activeStudentIndex]);
+
+        if (_activeStudentIndex + 1 < studentList.Count)
+            nextStudent1.SetStudent(studentList[_activeStudentIndex + 1]);
+        else
+            nextStudent1.gameObject.SetActive(false);
+
+        if (_activeStudentIndex + 2 < studentList.Count)
+            nextStudent2.SetStudent(studentList[_activeStudentIndex + 2]);
+        else
+            nextStudent2.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -71,11 +84,6 @@ public class GameLogicManager : MonoBehaviour
                 TrySelectHoldingLecture().Forget();
 
         }
-    }
-
-    public void GetCurrentStudent(Student student)
-    {
-        student = studentList[0];
     }
 
     public IEnumerable<Lecture> GetSelectedLectures()
