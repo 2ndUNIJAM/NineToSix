@@ -10,6 +10,8 @@ public class GameLogicManager : MonoBehaviour
 {
     public UISchedule Schedule => schedule;
 
+    public UILectureSpawner LectureSpawner => lectureSpawner;
+
     public bool IsHoldingLecture => _holdingLectureComponent != null;
 
     public bool IsOnAction => _isOnAction;
