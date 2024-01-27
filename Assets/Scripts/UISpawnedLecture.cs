@@ -21,6 +21,7 @@ public class UISpawnedLecture : MonoBehaviour
     private float _elapsedTime;
     private UILecture _ghostGraphic;
     private RectTransform _rectTransform;
+    private bool _isVanished;
 
     private void Update()
     {
@@ -33,7 +34,10 @@ public class UISpawnedLecture : MonoBehaviour
             timerSlider.value = _timeLimit - _elapsedTime;
 
             if (_elapsedTime >= _timeLimit)
-                lectureComponent.Remove(true);
+            {
+                _isVanished = true;
+                lectureComponent.Remove(false);
+            }
         }
     }
 
@@ -51,7 +55,7 @@ public class UISpawnedLecture : MonoBehaviour
 
     private void Remove(bool forced)
     {
-        Removed?.Invoke(_index, forced);
+        Removed?.Invoke(_index, _isVanished);
         
         if (lectureComponent && lectureComponent.transform.parent != transform)
             Destroy(lectureComponent.gameObject);

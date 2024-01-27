@@ -63,8 +63,8 @@ public class UIScheduleSlot : MonoBehaviour
 
     public void CompleteKeyAction()
     {
-        _isOnKeyAction = true;
-        radialSlider.fillAmount = 1;
+        _isOnKeyAction = false;
+        radialSlider.DOFillAmount(1, 0.3f);
     }
 
     public void Confirm()

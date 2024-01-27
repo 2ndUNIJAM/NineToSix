@@ -49,9 +49,9 @@ public class UILectureSpawner : MonoBehaviour
             _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
     }
 
-    private void OnSpawnedLectureRemoved(int index, bool forced)
+    private void OnSpawnedLectureRemoved(int index, bool vanished)
     {
-        if (forced)
+        if (vanished)
             SpawnedLectureVanished?.Invoke();
         else
             SpawnedLectureProcessed?.Invoke();
