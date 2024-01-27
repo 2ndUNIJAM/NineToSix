@@ -73,7 +73,7 @@ public class UIScheduleSlot : MonoBehaviour
 
     public void Clear()
     {
-        if (_tween.active)
+        if (_tween != null && _tween.active)
             _tween.Kill();
         
         _filled = false;

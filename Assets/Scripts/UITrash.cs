@@ -10,6 +10,6 @@ public class UITrash : MonoBehaviour, IDropHandler
     public void OnDrop(PointerEventData eventData)
     {
         if (manager.IsHoldingLecture)
-            manager.TrashLecture();
+            manager.TrashHoldingLecture();
     }
 }
