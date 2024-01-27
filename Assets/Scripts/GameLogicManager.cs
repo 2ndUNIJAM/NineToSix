@@ -43,6 +43,8 @@ public class GameLogicManager : MonoBehaviour
 
     private const int timeLimit = 270;
 
+    private bool isImminent;
+
     private void Awake()
     {
         _selectedLectures = new List<Lecture>();
@@ -67,6 +69,10 @@ public class GameLogicManager : MonoBehaviour
 
         if (_currentAbsoluteTime >= timeLimit)
             EndGame();
+        else if (_currentAbsoluteTime > 260 && !SoundManager.Instance.IsPlaying(EBGMType.GameOverImminent));
+        {
+            SoundManager.Instance.PlaySound(EBGMType.GameOverImminent);
+        }
     }
 
     private void LoadLecture()
@@ -121,6 +127,7 @@ public class GameLogicManager : MonoBehaviour
         {
             lectureBucket.ReserveLecture(lecture);
             _holdingLectureComponent.Remove();
+            SoundManager.Instance.PlaySound(EBGMType.PutLecture);
         }
 
         UnholdLecture();
@@ -150,7 +157,7 @@ public class GameLogicManager : MonoBehaviour
     {
         var lecture = _holdingLectureComponent.Lecture;
 
-        if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= 18)
+        if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= studentList[_activeStudentIndex].GetStudentMaxCredit())
         {
             _isOnAction = true;
             actionDimmer.SetActive(true);
@@ -163,6 +170,7 @@ public class GameLogicManager : MonoBehaviour
                 currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
                 // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
                 AddScore(10);
+                SoundManager.Instance.PlaySound(EBGMType.PutLecture);
             }
             else
             {
@@ -199,7 +207,14 @@ public class GameLogicManager : MonoBehaviour
         // 학생의 필수 요청사항을 못 지킨 상태로 시간표를 확정했을 경우 -25 
         if (!studentList[_activeStudentIndex].GetFirstRequirement().DoesMeetRequirement()
             || !studentList[_activeStudentIndex].GetSecondRequirement().DoesMeetRequirement())
+        {
             AddScore(-25);
+            SoundManager.Instance.PlaySound(EBGMType.BadConfirm);
+        }
+        else
+        {
+            SoundManager.Instance.PlaySound(EBGMType.GoodConfirm);
+        }
 
 
         // 조건: activestudentIndex+1, studentList length  초과 시 게임 종료

@@ -14582,7 +14582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5641765c1d1ca45f5b2fd23545660a49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 0}
+  manager: {fileID: 33359475}
   reserveSlots:
   - {fileID: 843476034}
   - {fileID: 1177371480}
