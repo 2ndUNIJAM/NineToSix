@@ -7,11 +7,13 @@ using UnityEngine;
 public enum EBGMType // Resources/Sound 폴더 내 파일과 일치해야 함
 {
     ClickButton,
-    DragLecture,
+    PutLecture,
     RemoveLecture,
     GoodConfirm,
     BadConfirm,
-    GameOverImminent
+    GameOverImminent,
+    InGameBGM
+    // 시작화면 bgm 추가 필요
 }
 
 public class SoundManager : MonoBehaviour
@@ -65,7 +67,21 @@ public class SoundManager : MonoBehaviour
     
     public void PlaySound(EBGMType bgm)
     {
+        if(bgm == EBGMType.GameOverImminent || bgm == EBGMType.InGameBGM)
+        {
+            // bgm loop 설정
+            speakers[(int)bgm].GetComponent<AudioSource>().loop = true;
+        }
         speakers[(int)bgm].GetComponent<AudioSource>().Play();
     }
 
+
+    public bool IsPlaying(EBGMType bgm)
+    {
+        if (speakers[(int)bgm].GetComponent<AudioSource>().isPlaying)
+        {
+            return true;
+        }
+        return false;
+    }
 }
