@@ -3,19 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public class UISchedule : MonoBehaviour, IDropHandler
 {
+    public Lecture PreviewingLecture => _previewingLecture;
+
+    public Lecture ActioningLecture => _actioningLecture;
+    
     [SerializeField] private GameLogicManager manager;
     [SerializeField] private UIScheduleSlot slotTemplate;
     [SerializeField] private RectTransform slotParent;
     
     private UIScheduleSlot[,] _slots;  // [column, row] => [monday, 1]
-    private Lecture _previewingLecture;
+    private Lecture _previewingLecture, _actioningLecture;
 
     private void Awake()
     {
@@ -96,8 +99,11 @@ public class UISchedule : MonoBehaviour, IDropHandler
     /// </summary>
     public void HideLecturePreview()
     {
+        if (_previewingLecture == null)
+            return;
+        
         foreach (var schedulePos in _previewingLecture.Schedule)
-            _slots[schedulePos.x, schedulePos.y].Clear();
+            _slots[schedulePos.x, schedulePos.y].StopPreview();
         _previewingLecture = null;
     }
 
@@ -116,6 +122,9 @@ public class UISchedule : MonoBehaviour, IDropHandler
 
     public async UniTask<bool> StartLectureKeyAction(Lecture lecture)
     {
+        HideLecturePreview();
+        _actioningLecture = lecture;
+        
         var keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
         var typeColor = lecture.Data.Type switch
         {
@@ -128,7 +137,6 @@ public class UISchedule : MonoBehaviour, IDropHandler
         foreach (var schedulePos in lecture.Schedule)
         {
             var randIdx = Random.Range(0, keyCodes.Count);
-            _slots[schedulePos.x, schedulePos.y].Clear();
             _slots[schedulePos.x, schedulePos.y].ShowKeyAction(typeColor, keyCodes[randIdx], 3f);
             keyActionSlots.Add(keyCodes[randIdx], _slots[schedulePos.x, schedulePos.y]);
             keyCodes.RemoveAt(randIdx);
@@ -151,6 +159,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
             {
                 foreach (var schedulePos in lecture.Schedule)
                     _slots[schedulePos.x, schedulePos.y].Confirm();
+                _actioningLecture = null;
                 return true;
             }
 
@@ -160,6 +169,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
 
         foreach (var schedulePos in lecture.Schedule)
             _slots[schedulePos.x, schedulePos.y].Clear();
+        _actioningLecture = null;
         return false;
     }
 
