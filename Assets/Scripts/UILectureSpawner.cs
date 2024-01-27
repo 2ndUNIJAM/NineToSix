@@ -7,6 +7,10 @@ using Random = UnityEngine.Random;
 
 public class UILectureSpawner : MonoBehaviour
 {
+    public event Action SpawnedLectureVanished;
+
+    public event Action SpawnedLectureProcessed;
+    
     [SerializeField] private UISpawnedLecture lectureTemplate;
     [SerializeField] private RectTransform lectureParent;
 
@@ -23,20 +27,21 @@ public class UILectureSpawner : MonoBehaviour
 
     private void Start()
     {
-        SpawnNewLecture();
-        SpawnNewLecture();
-        SpawnNewLecture();
+        SpawnNewLecture(0);
+        SpawnNewLecture(1);
+        SpawnNewLecture(2);
     }
 
-    public void SpawnNewLecture()
+    public void SpawnNewLecture(int index)
     {
         int randIdx = Random.Range(0, _lectureData.Count);
         var lectureObj = new Lecture(_lectureData[randIdx]);
         _lectureData.RemoveAt(randIdx);
         
         var newLecture = Instantiate(lectureTemplate, lectureParent);
-        newLecture.Initialize(lectureObj);
+        newLecture.Initialize(lectureObj, index);
         newLecture.Removed += OnSpawnedLectureRemoved;
+        newLecture.transform.SetSiblingIndex(index);
         newLecture.transform.localScale = Vector3.one;
         newLecture.gameObject.SetActive(true);
 
@@ -44,8 +49,13 @@ public class UILectureSpawner : MonoBehaviour
             _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
     }
 
-    private void OnSpawnedLectureRemoved()
+    private void OnSpawnedLectureRemoved(int index, bool result)
     {
-        SpawnNewLecture();
+        if (result == true)
+            SpawnedLectureProcessed?.Invoke();
+        else
+            SpawnedLectureVanished?.Invoke();
+        
+        SpawnNewLecture(index);
     }
 }

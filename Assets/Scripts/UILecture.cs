@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -27,6 +28,13 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private Transform _originParent;
     private Lecture _lecture;
     private List<GameObject> _highTexts = new List<GameObject>();
+
+    private void OnEnable()
+    {
+        transform.localScale = new Vector3(0, 0, 1);
+        transform.DOScale(Vector3.one, 0.2f);
+        GetComponent<CanvasGroup>().blocksRaycasts = true;
+    }
 
     private void OnDestroy()
     {
@@ -91,7 +99,13 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void Remove()
     {
-        RemoveRequested?.Invoke();
+        GetComponent<CanvasGroup>().blocksRaycasts = false;
+        DOTween.Sequence()
+            .Append(transform.DOScale(new Vector3(0, 0, 1), 0.2f))
+            .AppendCallback(() =>
+            {
+                RemoveRequested?.Invoke();
+            }).Play();
     }
     
     public void OnPointerEnter(PointerEventData eventData)
