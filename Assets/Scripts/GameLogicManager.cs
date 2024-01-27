@@ -140,20 +140,20 @@ public class GameLogicManager : MonoBehaviour
         }
     }
 
-    public void ConfirmSchedule() // È®Á¤ÇÔ¼ö
+    public void ConfirmSchedule() // í™•ì •í•¨ìˆ˜
     {
-        // 0. Á¡¼ö °è»ê 
+        // 0. ì ìˆ˜ ê³„ì‚° 
 
 
 
-        // 1. ÇĞ»ı ±³Ã¼ 
+        // 1. í•™ìƒ êµì²´ 
         ++_activeStudentIndex;
         VisualizeStudent();
 
-        // 2. ½Ã°£Ç¥ Å¬¸®¾î UISchedule.cs¿¡ ClearSlots
+        // 2. ì‹œê°„í‘œ í´ë¦¬ì–´ UISchedule.csì— ClearSlots
         schedule.ClearSlots();
 
-        // 3. ¼ö°­ÇĞÁ¡ ÃÊ±âÈ­
+        // 3. ìˆ˜ê°•í•™ì  ì´ˆê¸°í™”
         _currentCredit = 0;
     }
 }
