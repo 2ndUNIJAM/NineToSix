@@ -5,20 +5,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
-using UnityEngine.Serialization;
+using UnityEngine.EventSystems;
 
-public class UIScheduleSlot : MonoBehaviour
+public class UIScheduleSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public bool Filled => _filled;
+
+    public event Action<Lecture> RemoveLectureRequested;
     
     [SerializeField] private Graphic colorGraphic;
     [SerializeField] private Image radialSlider;
     [SerializeField] private TextMeshProUGUI keyActionText;
+    [SerializeField] private UIScheduleTooltip tooltip;
 
     private float _keyActionTimeLimit, _keyActionElapsedTime;
     private bool _filled, _isOnKeyAction;
     private Color _fillColor = Color.white;
     private Tween _tween;
+    private Lecture _fillingLecture;
 
     private void Update()
     {
@@ -74,9 +78,10 @@ public class UIScheduleSlot : MonoBehaviour
         keyActionText.text = "X";
     }
 
-    public void Confirm()
+    public void Confirm(Lecture lecture)
     {
         _filled = true;
+        _fillingLecture = lecture;
         _isOnKeyAction = false;
         radialSlider.gameObject.SetActive(false);
         keyActionText.gameObject.SetActive(false);
@@ -93,5 +98,33 @@ public class UIScheduleSlot : MonoBehaviour
         radialSlider.gameObject.SetActive(false);
         keyActionText.gameObject.SetActive(false);
         colorGraphic.color = _fillColor;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!_filled)
+            return;
+        
+        tooltip.Show(_fillingLecture);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (!_filled)
+            return;
+
+        tooltip.Hide();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!_filled)
+            return;
+        if (eventData.button != PointerEventData.InputButton.Right)
+            return;
+        
+        // TODO: 팝업창 통해 의사 물어보기
+        RemoveLectureRequested?.Invoke(_fillingLecture);
+        tooltip.Hide();
     }
 }

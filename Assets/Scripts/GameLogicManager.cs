@@ -126,6 +126,12 @@ public class GameLogicManager : MonoBehaviour
         return _selectedLectures;
     }
 
+    public void RemoveSelectedLecture(Lecture lecture)
+    {
+        _selectedLectures.Remove(lecture);
+        AddScore(-8);
+    }
+
     public IEnumerable<LectureData> GetLectureData()
     {
         return _lectureData;

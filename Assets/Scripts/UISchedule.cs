@@ -33,6 +33,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
             for (int j = 0; j < 8; j++)
             {
                 var newSlot = Instantiate(slotTemplate, slotParent);
+                newSlot.RemoveLectureRequested += OnRemoveLectureRequested;
                 newSlot.transform.localScale = Vector3.one;
                 newSlot.gameObject.SetActive(true);
                 _slots[i, j] = newSlot;
@@ -79,11 +80,11 @@ public class UISchedule : MonoBehaviour, IDropHandler
     public void ShowLecturePreview(Lecture lecture)
     {
         _previewingLecture = lecture;
-        var previewColor = _previewingLecture.Data.Type switch
+        Color previewColor = _previewingLecture.Data.Type switch
         {
-            ELectureType.LiberalArt => Color.cyan,
-            ELectureType.MajorBasic => Color.green,
-            ELectureType.MajorRequired => Color.magenta,
+            ELectureType.LiberalArt => new Color32(168, 202, 115, 255),
+            ELectureType.MajorBasic => new Color32(125, 166, 232, 255),
+            ELectureType.MajorRequired => new Color32(240, 134, 118, 255),
             _ => Color.black
         };
 
@@ -127,9 +128,9 @@ public class UISchedule : MonoBehaviour, IDropHandler
         var keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
         var typeColor = lecture.Data.Type switch
         {
-            ELectureType.LiberalArt => Color.cyan,
-            ELectureType.MajorBasic => Color.green,
-            ELectureType.MajorRequired => Color.magenta
+            ELectureType.LiberalArt => new Color32(168, 202, 115, 255),
+            ELectureType.MajorBasic => new Color32(125, 166, 232, 255),
+            ELectureType.MajorRequired => new Color32(240, 134, 118, 255)
         };
         var keyActionSlots = new Dictionary<KeyCode, UIScheduleSlot>();
         var elapsedTime = 0f;
@@ -169,7 +170,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
             {
                 await UniTask.WaitForSeconds(0.5f);
                 foreach (var schedulePos in lecture.Schedule)
-                    _slots[schedulePos.x, schedulePos.y].Confirm();
+                    _slots[schedulePos.x, schedulePos.y].Confirm(_actioningLecture);
                 _actioningLecture = null;
                 return true;
             }
@@ -208,5 +209,12 @@ public class UISchedule : MonoBehaviour, IDropHandler
             HideLecturePreview();
             manager.TrySelectHoldingLecture().Forget();
         }
+    }
+
+    public void OnRemoveLectureRequested(Lecture lecture)
+    {
+        foreach (var schedulePos in lecture.Schedule)
+            _slots[schedulePos.x, schedulePos.y].Clear();
+        manager.RemoveSelectedLecture(lecture);
     }
 }
