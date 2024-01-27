@@ -1,17 +1,65 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Newtonsoft.Json;
+using Random = UnityEngine.Random;
 
 public class GameLogicManager : MonoBehaviour
 {
     public UISchedule Schedule => schedule;
-    
+
+    public bool IsHoldingLecture => _holdingLectureComponent != null;
+
+    [SerializeField] private UICurrentStudent currentStudent;
+    [SerializeField] private UINextStudent nextStudentTemplate;
+    [SerializeField] private RectTransform nextStudentParent;
     [SerializeField] private UISchedule schedule;
+    [SerializeField] private UILectureSpawner lectureSpawner;
+    [SerializeField] private UILectureBucket lectureBucket;
     
     List<Student> studentList;
-    private List<Lecture> _selectedLectures;
+    private Student _activeStudent;
+    private List<RequirementBase> _requirements;
+    private Queue<Student> _nextStudentQueue;
     
+    private UILecture _holdingLectureComponent;
+    private GameObject _ghostGraphic;
+    private bool _isScheduleDroppable, _isTrashDroppable;
+    private TextAsset _lectureJson;
+    private List<LectureData> _lectureData;
+    private List<Lecture> _selectedLectures;
+
+    private int _currentCredit;
+
+    private void Awake()
+    {
+        _selectedLectures = new List<Lecture>();
+    }
+
+    private void Start()
+    {
+        _lectureJson = Resources.Load<TextAsset>("lectures");
+        
+        // Load lecture
+        _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
+        
+    }
+
+    private void Update()
+    {
+        if (!IsHoldingLecture || !_ghostGraphic)
+            return;
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (_isScheduleDroppable)
+                TrySelectHoldingLecture().Forget();
+
+        }
+    }
+
     public void GetCurrentStudent(Student student)
     {
         student = studentList[0];
@@ -19,23 +67,64 @@ public class GameLogicManager : MonoBehaviour
 
     public IEnumerable<Lecture> GetSelectedLectures()
     {
-        yield return null;
-    }
-    
-    
-
-    public void ReserveLecture(Lecture lecture)
-    {
-        
+        return _selectedLectures;
     }
 
-    public void OnLectureKeyActionStart(Lecture lecture)
+    public void GenerateNewLecture()
     {
-        
+        int randIdx = Random.Range(0, _lectureData.Count);
+        var newLecture = new Lecture(_lectureData[randIdx]);
+        lectureSpawner.SpawnLecture(newLecture);
+        _lectureData.RemoveAt(randIdx);
+
+        // 다 떨어졌으면 다시 로드합니다. 근데 설마 다 떨어지겠어
+        if (_lectureData.Count == 0)
+            _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
     }
 
-    public void OnLectureKeyActionFinish(bool succeed)
+    public bool TryReserveLecture(Lecture lecture)
     {
+        if (lectureBucket.IsFull)
+            return false;
         
+        lectureBucket.ReserveLecture(lecture);
+        return true;
+    }
+
+    public void HoldLecture(UILecture lecture)
+    {
+        _holdingLectureComponent = lecture;
+    }
+
+    public void UnholdLecture()
+    {
+        _holdingLectureComponent = null;
+    }
+
+    public void SetScheduleDroppable(bool droppable)
+    {
+        _isScheduleDroppable = droppable;
+    }
+
+    public void SetTrashDroppable(bool droppable)
+    {
+        _isTrashDroppable = droppable;
+    }
+
+    public async UniTaskVoid TrySelectHoldingLecture()
+    {
+        var lecture = _holdingLectureComponent.Lecture;
+        
+        if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= _activeStudent.GetStudentMaxCredit())
+        {
+            var succeed = await schedule.StartLectureKeyAction(lecture);
+            if (succeed)
+            {
+                _selectedLectures.Add(lecture);
+                _currentCredit += lecture.Credit;
+                _holdingLectureComponent.Remove();
+            }
+            UnholdLecture();
+        }
     }
 }

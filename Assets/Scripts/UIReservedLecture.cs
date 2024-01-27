@@ -1,18 +1,32 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UIReservedLecture : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool IsEmpty => _isEmpty;
+    
+    [SerializeField] private UILecture lectureComponent;
+
+    private bool _isEmpty;
+
+    private void Awake()
     {
-        
+        _isEmpty = true;
+        lectureComponent.RemoveRequested += RemoveLecture;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetLecture(Lecture lecture)
     {
-        
+        lectureComponent.SetLecture(lecture);
+        lectureComponent.gameObject.SetActive(true);
+        _isEmpty = false;
+    }
+
+    public void RemoveLecture()
+    {
+        lectureComponent.gameObject.SetActive(false);
+        _isEmpty = true;
     }
 }

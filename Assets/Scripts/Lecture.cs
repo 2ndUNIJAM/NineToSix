@@ -27,7 +27,11 @@ public class Lecture
 
     public int Rating => _rating;
 
+    public int TimeLimit => _timeLimit;
+
     public IEnumerable<Vector2Int> Schedule => _schedule;
+
+    public event System.Action Suicided;
     
     public int credit; // 학점
     public int profRating; // 0~5 사이의 0.5 간격 랜덤
@@ -37,7 +41,7 @@ public class Lecture
 
     // Implement: 들을 수 있는 학년 변수
 
-    private int _credit, _rating;
+    private int _credit, _rating, _timeLimit;
     private LectureData _data;
     private List<Vector2Int> _schedule;
 
@@ -51,7 +55,21 @@ public class Lecture
             _credit = Random.Range(1, 4);
         else
             _credit = 3;
-        
-        
+
+        _rating = Random.Range(5, 20) % 10 + 1;
+        _timeLimit = _data.Type switch
+        {
+            ELectureType.LiberalArt => 5,
+            ELectureType.MajorBasic => 7,
+            ELectureType.MajorRequired => 9,
+            _ => 5
+        };
+
+        // TODO: 스케쥴 생성
+    }
+
+    public void Suicide()
+    {
+        Suicided?.Invoke();
     }
 }
