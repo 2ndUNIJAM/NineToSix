@@ -122,7 +122,6 @@ public class UISchedule : MonoBehaviour, IDropHandler
 
     public async UniTask<bool> StartLectureKeyAction(Lecture lecture)
     {
-        HideLecturePreview();
         _actioningLecture = lecture;
         
         var keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
@@ -175,7 +174,12 @@ public class UISchedule : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        Debug.Log("Dropped.");
         if (manager.IsHoldingLecture)
+        {
+            // 즉, 그것이 아직 프리뷰 중임을 의미합니다.
+            HideLecturePreview();
             manager.TrySelectHoldingLecture().Forget();
+        }
     }
 }
