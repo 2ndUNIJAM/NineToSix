@@ -21,6 +21,7 @@ public class GameLogicManager : MonoBehaviour
     [SerializeField] private UISchedule schedule;
     [SerializeField] private UILectureSpawner lectureSpawner;
     [SerializeField] private UILectureBucket lectureBucket;
+    [SerializeField] private UIScore score;
     [SerializeField] private GameObject actionDimmer;
     [SerializeField] private RankingData rankingData;
 
@@ -49,6 +50,7 @@ public class GameLogicManager : MonoBehaviour
         VisualizeStudent();
 
         _currentScore = 0;
+        score.Initialize();
     }
 
     private void LoadLecture()
@@ -199,5 +201,6 @@ public class GameLogicManager : MonoBehaviour
     void UpdateScore(int score)
     {
         _currentScore += score;
+        this.score.UpdateScore(score);
     }
 }
