@@ -7,6 +7,7 @@ public abstract class RequirementBase
 {
     [SerializeField] protected GameLogicManager gLogicManager;
     public string contentTitle;
+    public bool essential;
     public abstract bool DoesMeetRequirement();
     public void GetLogicManager()
     {
