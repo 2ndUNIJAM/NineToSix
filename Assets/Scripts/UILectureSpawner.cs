@@ -63,7 +63,7 @@ public class UILectureSpawner : MonoBehaviour
     public void SetGuaranteedLecture(int id)
     {
         var index = _majorReqs.FindIndex(x => x.ID == id);
-        _guaranteedLecture = _majorReqs[index];
+        _guaranteedLecture = _majorReqs[index]; // Error Code. ArgumentOutofRangeException
         _majorReqs.RemoveAt(index);
         _guaranteedLectureExists = true;
     }

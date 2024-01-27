@@ -12,17 +12,20 @@ public enum EBGMType // Resources/Sound 폴더 내 파일과 일치해야 함
     GoodConfirm,
     BadConfirm,
     GameOverImminent, // 5
-    SerialHit1,
+    SerialHit,
     SerialHit2,
     SerialHit3,
-    InGameBGM
-    // 시작화면 bgm 추가 필요
+    SerialHitFail,
+    StartMenuBGM, // 10
+    InGameBGM // 11
 }
 
 public class SoundManager : MonoBehaviour
 {
     AudioClip[] soundEffects;
     GameObject[] speakers;
+    int serialHitCount;
+    int maxSerialHitCount;
 
     public static SoundManager Instance
     {
@@ -65,15 +68,49 @@ public class SoundManager : MonoBehaviour
         {
             speakers[i].GetComponent<AudioSource>().clip = soundEffects[i];
         }
+
+        speakers[(int)EBGMType.StartMenuBGM].GetComponent<AudioSource>().loop = true;
+        speakers[(int)EBGMType.InGameBGM].GetComponent<AudioSource>().loop = true;
+        speakers[(int)EBGMType.GameOverImminent].GetComponent<AudioSource>().loop = true;
+
+        serialHitCount = 0;
     }
-    
+
     public void PlaySound(EBGMType bgm)
     {
-        if(bgm == EBGMType.GameOverImminent || bgm == EBGMType.InGameBGM)
+/*        if(bgm == EBGMType.StartMenuBGM) 
         {
-            // bgm loop 설정
-            speakers[(int)bgm].GetComponent<AudioSource>().loop = true;
+            if(IsPlaying(EBGMType.InGameBGM))
+            {
+                StopSound(EBGMType.InGameBGM);
+            }
         }
+        else if(bgm == EBGMType.InGameBGM)
+        {
+            if (IsPlaying(EBGMType.StartMenuBGM))
+            {
+                StopSound(EBGMType.StartMenuBGM);
+            }
+        }*/
+        if(bgm == EBGMType.SerialHit)
+        {
+            // 1 3: 2 / 2 3: 1 / 3 3: 0 || 1 2 : 1 / 2 2 : 0 || 1 1 : 0 
+            switch (maxSerialHitCount - ++serialHitCount)
+            {
+                case 2:
+                    speakers[(int)EBGMType.SerialHit].GetComponent<AudioSource>().Play();
+                    break;
+                case 1:
+                    speakers[(int)EBGMType.SerialHit2].GetComponent<AudioSource>().Play();
+                    break;
+                case 0: // 최대값 도달
+                    speakers[(int)EBGMType.SerialHit3].GetComponent<AudioSource>().Play();
+                    ResetSerialHitCount();
+                    break;
+            }
+            return;
+        }
+
         speakers[(int)bgm].GetComponent<AudioSource>().Play();
     }
 
@@ -89,5 +126,15 @@ public class SoundManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void ResetSerialHitCount()
+    {
+        serialHitCount = 0;
+    }
+
+    public void SetMaxSerialHitCount(int num)
+    {
+        maxSerialHitCount = num;
     }
 }

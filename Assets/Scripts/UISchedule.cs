@@ -136,7 +136,8 @@ public class UISchedule : MonoBehaviour, IDropHandler
         var elapsedTime = 0f;
         
         InitializeKeyAction();
-        
+
+        SoundManager.Instance.SetMaxSerialHitCount(lecture.Credit);
         while (elapsedTime < 3f)
         {
             if (Input.anyKeyDown)
@@ -155,13 +156,17 @@ public class UISchedule : MonoBehaviour, IDropHandler
                 {
                     keyActionSlots[currentKey].CompleteKeyAction();
                     keyActionSlots.Remove(currentKey);
+
+                    SoundManager.Instance.PlaySound(EBGMType.SerialHit);
                 }
                 else
                 {
                     foreach (var schedulePos in lecture.Schedule)
                         _slots[schedulePos.x, schedulePos.y].ShowFailedKeyAction();
                     await UniTask.WaitForSeconds(0.5f);
-                        
+
+                    SoundManager.Instance.PlaySound(EBGMType.SerialHitFail); // 딜레이 느림. 수정 필요 
+                    SoundManager.Instance.ResetSerialHitCount();
                     InitializeKeyAction();
                 }
             }
