@@ -115,11 +115,7 @@ public class GameLogicManager : MonoBehaviour
     {
         var lecture = _holdingLectureComponent.Lecture;
 
-<<<<<<< HEAD
         if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= 18)
-=======
-        if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= _activeStudent.GetStudentMaxCredit())
->>>>>>> 96c5b72b617344c351c703d32fdb2740a8138f5f
         {
             var succeed = await schedule.StartLectureKeyAction(lecture);
             if (succeed)
