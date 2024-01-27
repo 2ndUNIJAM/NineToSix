@@ -217,6 +217,7 @@ MonoBehaviour:
   lectureSpawner: {fileID: 2136570348}
   lectureBucket: {fileID: 1969709071}
   score: {fileID: 553201572}
+  timer: {fileID: 1194682371}
   actionDimmer: {fileID: 1100237467}
   rankingData: {fileID: 11400000, guid: 90b28bb898bd82a4d866390c8bc9acfc, type: 2}
 --- !u!4 &33359476
@@ -7241,6 +7242,7 @@ GameObject:
   - component: {fileID: 1194682370}
   - component: {fileID: 1194682369}
   - component: {fileID: 1194682368}
+  - component: {fileID: 1194682371}
   m_Layer: 5
   m_Name: Time Panel
   m_TagString: Untagged
@@ -7332,6 +7334,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1194682366}
   m_CullTransparentMesh: 1
+--- !u!114 &1194682371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194682366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff91188d1e272e3409832a75cf967e0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textTime: {fileID: 204672203}
 --- !u!114 &1198142085 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4339345910103955182, guid: 60c5bc6b963e34496a1714b4ba749ab6, type: 3}
