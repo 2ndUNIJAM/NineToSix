@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class UILectureBucket : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public bool IsFull => _reservedCount == 4;
+    
+    [SerializeField] private UIReservedLecture[] reserveSlots;
 
-    // Update is called once per frame
-    void Update()
+    private int _reservedCount;
+
+    public void ReserveLecture(Lecture lecture)
     {
-        
+        foreach (var slot in reserveSlots)
+        {
+            if (slot.IsEmpty)
+            {
+                slot.SetLecture(lecture);
+                _reservedCount++;
+                return;
+            }
+        }
     }
 }

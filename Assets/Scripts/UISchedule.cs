@@ -1,14 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
-public class UISchedule : MonoBehaviour
+public class UISchedule : MonoBehaviour, IDropHandler
 {
+    [SerializeField] private GameLogicManager manager;
     [SerializeField] private UIScheduleSlot slotTemplate;
     [SerializeField] private RectTransform slotParent;
     
     private UIScheduleSlot[,] _slots;  // [column, row] => [monday, 1]
+    private Lecture _previewingLecture;
 
     private void Awake()
     {
@@ -62,13 +69,103 @@ public class UISchedule : MonoBehaviour
         return isClear;
     }
 
+    /// <summary>
+    /// 주어진 강의를 시간표에서 프리뷰합니다.
+    /// </summary>
+    /// <param name="lecture"></param>
     public void ShowLecturePreview(Lecture lecture)
     {
-        
+        _previewingLecture = lecture;
+        var previewColor = _previewingLecture.Data.Type switch
+        {
+            ELectureType.LiberalArt => Color.cyan,
+            ELectureType.MajorBasic => Color.green,
+            ELectureType.MajorRequired => Color.magenta,
+            _ => Color.black
+        };
+
+        foreach (var schedulePos in _previewingLecture.Schedule)
+        {
+            var slotFilled = _slots[schedulePos.x, schedulePos.y].Filled;
+            _slots[schedulePos.x, schedulePos.y].StartPreview(slotFilled ? Color.black : previewColor);
+        }
     }
 
+    /// <summary>
+    /// 현재 프리뷰 중인 강의의 프리뷰를 종료합니다.
+    /// </summary>
+    public void HideLecturePreview()
+    {
+        foreach (var schedulePos in _previewingLecture.Schedule)
+            _slots[schedulePos.x, schedulePos.y].Clear();
+        _previewingLecture = null;
+    }
+
+    /// <summary>
+    /// 주어진 강의가 시간표에서 자리가 있는지에 대해 알아봅니다.
+    /// </summary>
+    /// <param name="lecture"></param>
+    /// <returns></returns>
     public bool IsLectureAvailable(Lecture lecture)
     {
-        return true;
+        var isEmpty = true;
+        foreach (var schedulePos in lecture.Schedule)
+            isEmpty = isEmpty && !_slots[schedulePos.x, schedulePos.y].Filled;
+        return isEmpty;
+    }
+
+    public async UniTask<bool> StartLectureKeyAction(Lecture lecture)
+    {
+        var keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
+        var typeColor = lecture.Data.Type switch
+        {
+            ELectureType.LiberalArt => Color.cyan,
+            ELectureType.MajorBasic => Color.green,
+            ELectureType.MajorRequired => Color.magenta
+        };
+        var keyActionSlots = new Dictionary<KeyCode, UIScheduleSlot>();
+
+        foreach (var schedulePos in lecture.Schedule)
+        {
+            var randIdx = Random.Range(0, keyCodes.Count);
+            _slots[schedulePos.x, schedulePos.y].Clear();
+            _slots[schedulePos.x, schedulePos.y].ShowKeyAction(typeColor, keyCodes[randIdx], 3f);
+            keyActionSlots.Add(keyCodes[randIdx], _slots[schedulePos.x, schedulePos.y]);
+            keyCodes.RemoveAt(randIdx);
+        }
+
+        keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
+        var elapsedTime = 0f;
+        while (elapsedTime < 3f)
+        {
+            foreach (var keyCode in keyCodes)
+            {
+                if (Input.GetKeyDown(keyCode) && keyActionSlots.ContainsKey(keyCode))
+                {
+                    keyActionSlots[keyCode].CompleteKeyAction();
+                    keyActionSlots.Remove(keyCode);
+                }
+            }
+
+            if (keyActionSlots.Count == 0)
+            {
+                foreach (var schedulePos in lecture.Schedule)
+                    _slots[schedulePos.x, schedulePos.y].Confirm();
+                return true;
+            }
+
+            elapsedTime += Time.deltaTime;
+            await UniTask.Yield();
+        }
+
+        foreach (var schedulePos in lecture.Schedule)
+            _slots[schedulePos.x, schedulePos.y].Clear();
+        return false;
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (manager.IsHoldingLecture)
+            manager.TrySelectHoldingLecture().Forget();
     }
 }
