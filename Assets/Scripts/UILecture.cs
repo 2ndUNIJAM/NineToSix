@@ -16,7 +16,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public Lecture Lecture => _lecture;
 
-    public event Action RemoveRequested;
+    public event Action<bool> RemoveRequested;
 
     [SerializeField] private GameLogicManager manager;
     [SerializeField] private TextMeshProUGUI lectureName;
@@ -24,7 +24,6 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private RectTransform highTextParent;
     [SerializeField] private UIStarGauge starGauge;
     [SerializeField] private Transform dragParent;
-    [SerializeField] private bool preventRightClick = false;
 
     private bool _isDragging, _isBeingRemoved;
     private Transform _originParent;
@@ -99,7 +98,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         _highTexts.Add(highText.gameObject);
     }
 
-    public void Remove()
+    public void Remove(bool forced)
     {
         _isBeingRemoved = true;
         GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -107,7 +106,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             .Append(transform.DOScale(new Vector3(0, 0, 1), 0.2f))
             .AppendCallback(() =>
             {
-                RemoveRequested?.Invoke();
+                RemoveRequested?.Invoke(forced);
             }).Play();
     }
     
@@ -162,7 +161,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            Remove();
+            Remove(true);
             SoundManager.Instance.PlaySound(EBGMType.RemoveLecture);
         }
     }

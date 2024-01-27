@@ -7,7 +7,7 @@ public class UIReservedLecture : MonoBehaviour
 {
     public bool IsEmpty => _isEmpty;
 
-    public event Action Removed;
+    public event Action<bool> Removed;
     
     [SerializeField] private UILecture lectureComponent;
 
@@ -26,9 +26,9 @@ public class UIReservedLecture : MonoBehaviour
         _isEmpty = false;
     }
 
-    public void RemoveLecture()
+    public void RemoveLecture(bool forced)
     {
-        Removed?.Invoke();
+        Removed?.Invoke(forced);
         lectureComponent.transform.SetParent(transform);
         lectureComponent.transform.localPosition = Vector3.zero;
         lectureComponent.gameObject.SetActive(false);

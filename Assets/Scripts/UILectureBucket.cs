@@ -43,7 +43,7 @@ public class UILectureBucket : MonoBehaviour, IDropHandler
         return false;
     }
 
-    private void OnLectureRemove()
+    private void OnLectureRemove(bool forced)
     {
         _reservedCount--;
     }

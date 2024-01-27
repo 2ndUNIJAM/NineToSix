@@ -22,8 +22,6 @@ public class UISpawnedLecture : MonoBehaviour
     private UILecture _ghostGraphic;
     private RectTransform _rectTransform;
 
-    private bool _isVanishing;
-
     private void Update()
     {
         if (lectureComponent.IsDragging || lectureComponent.IsKeyActionTarget || lectureComponent.IsBeingRemoved)
@@ -35,10 +33,7 @@ public class UISpawnedLecture : MonoBehaviour
             timerSlider.value = _timeLimit - _elapsedTime;
 
             if (_elapsedTime >= _timeLimit)
-            {
-                _isVanishing = true;
-                lectureComponent.Remove();
-            }
+                lectureComponent.Remove(true);
         }
     }
 
@@ -54,9 +49,9 @@ public class UISpawnedLecture : MonoBehaviour
         lectureComponent.RemoveRequested += Remove;
     }
 
-    private void Remove()
+    private void Remove(bool forced)
     {
-        Removed?.Invoke(_index, !_isVanishing);
+        Removed?.Invoke(_index, forced);
         
         if (lectureComponent && lectureComponent.transform.parent != transform)
             Destroy(lectureComponent.gameObject);

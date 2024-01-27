@@ -130,7 +130,7 @@ public class GameLogicManager : MonoBehaviour
         if (!lectureBucket.IsFull && !lectureBucket.ContainsLecture(lecture))
         {
             lectureBucket.ReserveLecture(lecture);
-            _holdingLectureComponent.Remove();
+            _holdingLectureComponent.Remove(false);
             SoundManager.Instance.PlaySound(EBGMType.PutLecture);
         }
 
@@ -150,7 +150,7 @@ public class GameLogicManager : MonoBehaviour
     public void TrashHoldingLecture()
     {
         schedule.HideLecturePreview();
-        _holdingLectureComponent.Remove();
+        _holdingLectureComponent.Remove(true);
         UnholdLecture();
 
         // 장바구니의 강의를 드랍했을 경우 -5 
@@ -170,7 +170,7 @@ public class GameLogicManager : MonoBehaviour
             {
                 AddCredit(lecture.Credit);
                 _selectedLectures.Add(lecture);
-                _holdingLectureComponent.Remove();
+                _holdingLectureComponent.Remove(false);
                 currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
                 // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
                 AddScore(10);
