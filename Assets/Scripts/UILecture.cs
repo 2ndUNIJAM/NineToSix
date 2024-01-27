@@ -56,11 +56,11 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             Destroy(obj);
         _highTexts.Clear();
         
-        var typeColor = _lecture.Data.Type switch
+        Color typeColor = _lecture.Data.Type switch
         {
-            ELectureType.LiberalArt => Color.cyan,
-            ELectureType.MajorBasic => Color.green,
-            ELectureType.MajorRequired => Color.magenta,
+            ELectureType.LiberalArt => new Color32(168, 202, 115, 255),
+            ELectureType.MajorBasic => new Color32(125, 166, 232, 255),
+            ELectureType.MajorRequired => new Color32(240, 134, 118, 255),
             _ => Color.black
         };
         var typeText = _lecture.Data.Type switch

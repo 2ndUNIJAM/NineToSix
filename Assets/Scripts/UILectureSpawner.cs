@@ -132,7 +132,7 @@ public class UILectureSpawner : MonoBehaviour
         }
         else if (forced)
         {
-            // 점수 변화는 없습니다.;
+            // 점수 변화는 없습니다.
         }
         else
         {

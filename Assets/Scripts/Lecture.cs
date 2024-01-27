@@ -54,8 +54,8 @@ public class Lecture
         _rating = Random.Range(2, 10) % 5 + 1;
         _timeLimit = _data.Type switch
         {
-            ELectureType.LiberalArt => 5,
-            ELectureType.MajorBasic => 7,
+            ELectureType.LiberalArt => 7,
+            ELectureType.MajorBasic => 8,
             ELectureType.MajorRequired => 9,
             _ => 5
         };
