@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler
 {
     public bool IsDragging => _isDragging;
 
@@ -163,6 +163,13 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             Remove();
+            SoundManager.Instance.PlaySound(EBGMType.RemoveLecture);
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+            SoundManager.Instance.PlaySound(EBGMType.ClickButton);
     }
 }
