@@ -86,17 +86,24 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (manager.IsHoldingLecture)
+            return;
+        
         manager.Schedule.ShowLecturePreview(_lecture);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (manager.IsHoldingLecture)
+            return;
+        
         if (!_isDragging)
             manager.Schedule.HideLecturePreview();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log("Started dragging.");
         _isDragging = true;
         manager.HoldLecture(this);
         _originParent = transform.parent;
@@ -115,6 +122,12 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         transform.localPosition = Vector3.zero;
         GetComponent<CanvasGroup>().blocksRaycasts = true;
         _isDragging = false;
-        manager.Schedule.HideLecturePreview();
+
+        if (!manager.IsOnAction)
+        {
+            manager.Schedule.HideLecturePreview();
+            manager.UnholdLecture();
+        }
+        Debug.Log("Ended dragging.");
     }
 }
