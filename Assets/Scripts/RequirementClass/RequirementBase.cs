@@ -10,8 +10,8 @@ public abstract class RequirementBase
     public string contentTitle;
     public bool essential;
     public abstract bool DoesMeetRequirement();
-    public virtual void OnEnter() { return; } // logic¿¡¼­ Visualization ÇÒ¶§ ½ÇÇà / ¿ªÇÒ: id ¹ÝÈ¯ 
-    public virtual void OnExit() { return; } // logic¿¡¼­ Student ³ª°¡±â Á÷Àü cleanup > È®Á¤ ½Ã ½ÇÇà
+    public virtual void OnEnter() { return; } // logicì—ì„œ Visualization í• ë•Œ ì‹¤í–‰ / ì—­í• : id ë°˜í™˜ 
+    public virtual void OnExit() { return; } // logicì—ì„œ Student ë‚˜ê°€ê¸° ì§ì „ cleanup > í™•ì • ì‹œ ì‹¤í–‰
 
     public void GetLogicManager()
     {
