@@ -24,8 +24,10 @@ public class GameLogicManager : MonoBehaviour
     [SerializeField] private UIScore score;
     [SerializeField] private UITimer timer;
     [SerializeField] private UICredit credit;
+    [SerializeField] private UIGameEnd gameEnd;
     [SerializeField] private GameObject actionDimmer;
     [SerializeField] private RankingData rankingData;
+    [SerializeField] private GameObject gamePanel;
 
     List<Student> studentList;
     private int _activeStudentIndex;
@@ -36,8 +38,7 @@ public class GameLogicManager : MonoBehaviour
     private List<Lecture> _selectedLectures;
     private bool _isOnAction;
 
-    private int _currentCredit;
-    private int _currentScore;
+    private int _currentCredit, _currentScore, _confirmCount;
     private float _currentAbsoluteTime;
 
     private const int timeLimit = 270;
@@ -65,7 +66,7 @@ public class GameLogicManager : MonoBehaviour
         timer.UpdateTime(_currentAbsoluteTime);
 
         if (_currentAbsoluteTime >= timeLimit)
-            Tryquit();
+            EndGame();
     }
 
     private void LoadLecture()
@@ -121,7 +122,7 @@ public class GameLogicManager : MonoBehaviour
             lectureBucket.ReserveLecture(lecture);
             _holdingLectureComponent.Remove();
         }
-        
+
         UnholdLecture();
     }
 
@@ -179,6 +180,7 @@ public class GameLogicManager : MonoBehaviour
         // 제한시간 내에 실시간 수강신청란의 과목을 제거한 경우 +2 > TODO
         // 제한시간 내에 실시간 수강신청란의 과목을 제거하지 못한 경우 -3 > TODO
         // 수강신청 현황란의 강의를 드랍했을 경우 -10 > TODO
+        _confirmCount++;
 
 
         // 선택 요청사항을 만족한 상태로 시간표를 확정했을 경우 (식 활용) 
@@ -188,6 +190,8 @@ public class GameLogicManager : MonoBehaviour
         float reqWeight = studentList[_activeStudentIndex].GetLastRequirement().DoesMeetRequirement() ? 1.15f : 1; // 요구사항 가중치
         int confirmScore = (int)((basicScore + bonusWeight * (21 - _currentCredit) / (21 - _currentCredit + bonusScore)) * reqWeight);
         AddScore(confirmScore);
+
+
 
 
 
@@ -202,7 +206,7 @@ public class GameLogicManager : MonoBehaviour
         if (++_activeStudentIndex >= studentList.Count)
         {
             // 게임 종료
-            Tryquit();
+            EndGame();
         }
         else
         {
@@ -221,7 +225,7 @@ public class GameLogicManager : MonoBehaviour
     void AddScore(int score)
     {
         _currentScore += score;
-        this.score.UpdateScore(score);
+        this.score.UpdateScore(_currentScore);
     }
 
     void AddCredit(int credit)
@@ -230,9 +234,11 @@ public class GameLogicManager : MonoBehaviour
         this.credit.UpdateCredit(_currentCredit);
     }
 
-    private void Tryquit()
+    private void EndGame()
     {
-        rankingData.AddRanking(_currentScore);
-        GameManager.Instance.Quit();
+        rankingData.AddRanking(_currentScore, _confirmCount);
+        gameEnd.gameObject.SetActive(true);
+        gameEnd.Init(rankingData);
+        gamePanel.SetActive(false);
     }
 }

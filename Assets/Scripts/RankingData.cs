@@ -5,14 +5,16 @@ using UnityEditor;
 using UnityEngine;
 
 [Serializable]
-public class Ranking
+public class PlayerData
 {
     public string PlayerName;
     public int PlayerScore;
-    public Ranking(string name, int score)
+    public int ConfirmCount;
+    public PlayerData(string name, int score, int confirm)
     {
         PlayerName = name;
         PlayerScore = score;
+        ConfirmCount = confirm;
     }
 }
 
@@ -37,7 +39,7 @@ public class RankingData : ScriptableObject
 {
 
     [SerializeField] private string playerName;
-    [SerializeField] private List<Ranking> rankingData;
+    [SerializeField] private List<PlayerData> ranking;
 
 
     public void SetPlayerName(string name)
@@ -45,18 +47,30 @@ public class RankingData : ScriptableObject
         this.playerName = name;
     }
 
-    public void AddRanking(int score)
+    public void AddRanking(int score, int count)
     {
-        rankingData.Add(new Ranking(this.playerName, score));
+        ranking.Add(new PlayerData(this.playerName, score, count));
     }
 
-    public IEnumerable<Ranking> GetDescendingRanking()
+    public IEnumerable<PlayerData> GetDescendingRanking()
     {
-        return from ranking in rankingData orderby ranking.PlayerScore descending select ranking;
+        return from playerData in ranking orderby playerData.PlayerScore descending select playerData;
     }
 
     public void Clear()
     {
-        rankingData.Clear();
+        ranking.Clear();
+    }
+
+    public bool InTop10()
+    {
+        var lastData = ranking.Last();
+        var scores = from playerData in ranking orderby playerData.PlayerScore descending select playerData.PlayerScore;
+        return scores.Count() <= 10 || lastData.PlayerScore >= scores.ElementAt(9);
+    }
+
+    public PlayerData GetLast()
+    {
+        return ranking.Last();
     }
 }
