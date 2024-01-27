@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Student
 {
-    const string department = "나태학과";
+    const string department = "시작이반학과";
     string studentName; // 한글 최대 6글자
     int studentID;
     int grade; // 학년
