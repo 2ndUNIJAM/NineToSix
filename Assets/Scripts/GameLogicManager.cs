@@ -12,21 +12,23 @@ public class GameLogicManager : MonoBehaviour
 
     public bool IsHoldingLecture => _holdingLectureComponent != null;
 
+    public bool IsOnAction => _isOnAction;
+
     [SerializeField] private UICurrentStudent currentStudent;
     [SerializeField] private UINextStudent nextStudent1, nextStudent2;
     [SerializeField] private UISchedule schedule;
     [SerializeField] private UILectureSpawner lectureSpawner;
     [SerializeField] private UILectureBucket lectureBucket;
-
+    [SerializeField] private GameObject actionDimmer;
+    
     List<Student> studentList;
     private int _activeStudentIndex;
 
     private UILecture _holdingLectureComponent;
-    private GameObject _ghostGraphic;
-    private bool _isScheduleDroppable, _isTrashDroppable;
     private TextAsset _lectureJson;
     private List<LectureData> _lectureData;
     private List<Lecture> _selectedLectures;
+    private bool _isOnAction;
 
     private int _currentCredit;
 
@@ -73,19 +75,6 @@ public class GameLogicManager : MonoBehaviour
             nextStudent2.gameObject.SetActive(false);
     }
 
-    private void Update()
-    {
-        if (!IsHoldingLecture || !_ghostGraphic)
-            return;
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (_isScheduleDroppable)
-                TrySelectHoldingLecture().Forget();
-
-        }
-    }
-
     public IEnumerable<Lecture> GetSelectedLectures()
     {
         return _selectedLectures;
@@ -110,14 +99,11 @@ public class GameLogicManager : MonoBehaviour
         _holdingLectureComponent = null;
     }
 
-    public void SetScheduleDroppable(bool droppable)
+    public void TrashLecture()
     {
-        _isScheduleDroppable = droppable;
-    }
-
-    public void SetTrashDroppable(bool droppable)
-    {
-        _isTrashDroppable = droppable;
+        schedule.HideLecturePreview();
+        _holdingLectureComponent.Remove();
+        UnholdLecture();
     }
 
     public async UniTaskVoid TrySelectHoldingLecture()
@@ -126,6 +112,8 @@ public class GameLogicManager : MonoBehaviour
 
         if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= 18)
         {
+            _isOnAction = true;
+            actionDimmer.SetActive(true);
             var succeed = await schedule.StartLectureKeyAction(lecture);
             if (succeed)
             {
@@ -134,6 +122,8 @@ public class GameLogicManager : MonoBehaviour
                 _holdingLectureComponent.Remove();
             }
             UnholdLecture();
+            actionDimmer.SetActive(false);
+            _isOnAction = false;
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public bool IsDragging => _isDragging;
 
@@ -21,10 +21,12 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private RectTransform highTextParent;
     [SerializeField] private UIStarGauge starGauge;
     [SerializeField] private Transform dragParent;
+    [SerializeField] private bool preventRightClick = false;
 
     private bool _isDragging;
     private Transform _originParent;
     private Lecture _lecture;
+    private List<GameObject> _highTexts = new List<GameObject>();
 
     private void OnDestroy()
     {
@@ -34,10 +36,17 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void SetLecture(Lecture lecture)
     {
+        // 초기화
         _lecture = lecture;
+        _isDragging = false;
+        GetComponent<CanvasGroup>().blocksRaycasts = true;
         
         lectureName.text = _lecture.Data.Name;
         // 과목분류
+        foreach (var obj in _highTexts)
+            Destroy(obj);
+        _highTexts.Clear();
+        
         var typeColor = _lecture.Data.Type switch
         {
             ELectureType.LiberalArt => Color.cyan,
@@ -77,6 +86,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         highText.Initialize(color, text);
         highText.transform.localScale = Vector3.one;
         highText.gameObject.SetActive(true);
+        _highTexts.Add(highText.gameObject);
     }
 
     public void Remove()
@@ -86,17 +96,24 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (manager.IsHoldingLecture)
+            return;
+        
         manager.Schedule.ShowLecturePreview(_lecture);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (manager.IsHoldingLecture)
+            return;
+        
         if (!_isDragging)
             manager.Schedule.HideLecturePreview();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log("Started dragging.");
         _isDragging = true;
         manager.HoldLecture(this);
         _originParent = transform.parent;
@@ -115,6 +132,26 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         transform.localPosition = Vector3.zero;
         GetComponent<CanvasGroup>().blocksRaycasts = true;
         _isDragging = false;
-        manager.Schedule.HideLecturePreview();
+
+        if (!manager.IsOnAction)
+        {
+            manager.Schedule.HideLecturePreview();
+            manager.UnholdLecture();
+        }
+        Debug.Log("Ended dragging.");
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (preventRightClick)
+            return;
+        if (manager.IsHoldingLecture)
+            return;
+        if (eventData.button != PointerEventData.InputButton.Right)
+            return;
+
+        var succeed = manager.TryReserveLecture(_lecture);
+        if (succeed)
+            Remove();
     }
 }

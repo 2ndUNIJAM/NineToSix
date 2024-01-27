@@ -6,6 +6,8 @@ using UnityEngine;
 public class UIReservedLecture : MonoBehaviour
 {
     public bool IsEmpty => _isEmpty;
+
+    public event Action Removed;
     
     [SerializeField] private UILecture lectureComponent;
 
@@ -26,6 +28,9 @@ public class UIReservedLecture : MonoBehaviour
 
     public void RemoveLecture()
     {
+        Removed?.Invoke();
+        lectureComponent.transform.SetParent(transform);
+        lectureComponent.transform.localPosition = Vector3.zero;
         lectureComponent.gameObject.SetActive(false);
         _isEmpty = true;
     }
