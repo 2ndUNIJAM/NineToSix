@@ -44,7 +44,7 @@ public class ReqLectureNumber : RequirementBase
                 ++numOKLectures;
             }
         }
-        if (numOKLectures == reqNumLectures) return true;
+        if (numOKLectures >= reqNumLectures) return true;
         else return false;
     }
 
