@@ -50,12 +50,16 @@ public class UILectureSpawner : MonoBehaviour
             _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
     }
 
-    private void OnSpawnedLectureRemoved(int index, bool vanished)
+    private void OnSpawnedLectureRemoved(int index, bool forced, bool vanished)
     {
         if (vanished)
         {
             SpawnedLectureVanished?.Invoke();
             manager.AddScore(-3);
+        }
+        else if (forced)
+        {
+            // 점수 변화는 없습니다.;
         }
         else
         {

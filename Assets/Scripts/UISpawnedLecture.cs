@@ -10,7 +10,7 @@ using UnityEngine.Serialization;
 
 public class UISpawnedLecture : MonoBehaviour
 {
-    public event Action<int, bool> Removed;
+    public event Action<int, bool, bool> Removed;
     
     [SerializeField] private UILecture lectureComponent;
     [SerializeField] private Slider timerSlider;
@@ -55,7 +55,7 @@ public class UISpawnedLecture : MonoBehaviour
 
     private void Remove(bool forced)
     {
-        Removed?.Invoke(_index, _isVanished);
+        Removed?.Invoke(_index, forced, _isVanished);
         
         if (lectureComponent && lectureComponent.transform.parent != transform)
             Destroy(lectureComponent.gameObject);

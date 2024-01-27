@@ -129,6 +129,9 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+        
         Debug.Log("Started dragging.");
         _isDragging = true;
         manager.HoldLecture(this);
@@ -139,11 +142,17 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+        
         transform.position = eventData.pointerCurrentRaycast.worldPosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+        
         transform.SetParent(_originParent);
         transform.localPosition = Vector3.zero;
         GetComponent<CanvasGroup>().blocksRaycasts = true;

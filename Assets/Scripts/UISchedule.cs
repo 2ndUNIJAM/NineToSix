@@ -132,30 +132,42 @@ public class UISchedule : MonoBehaviour, IDropHandler
             ELectureType.MajorRequired => Color.magenta
         };
         var keyActionSlots = new Dictionary<KeyCode, UIScheduleSlot>();
-
-        foreach (var schedulePos in lecture.Schedule)
-        {
-            var randIdx = Random.Range(0, keyCodes.Count);
-            _slots[schedulePos.x, schedulePos.y].ShowKeyAction(typeColor, keyCodes[randIdx], 3f);
-            keyActionSlots.Add(keyCodes[randIdx], _slots[schedulePos.x, schedulePos.y]);
-            keyCodes.RemoveAt(randIdx);
-        }
-
-        keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
         var elapsedTime = 0f;
+        
+        InitializeKeyAction();
+        
         while (elapsedTime < 3f)
         {
-            foreach (var keyCode in keyCodes)
+            if (Input.anyKeyDown)
             {
-                if (Input.GetKeyDown(keyCode) && keyActionSlots.ContainsKey(keyCode))
+                var currentKey = KeyCode.None;
+                foreach (var keyCode in keyActionSlots.Keys)
                 {
-                    keyActionSlots[keyCode].CompleteKeyAction();
-                    keyActionSlots.Remove(keyCode);
+                    if (Input.GetKeyDown(keyCode))
+                    {
+                        currentKey = keyCode;
+                        break;
+                    }
+                }
+
+                if (currentKey != KeyCode.None)
+                {
+                    keyActionSlots[currentKey].CompleteKeyAction();
+                    keyActionSlots.Remove(currentKey);
+                }
+                else
+                {
+                    foreach (var schedulePos in lecture.Schedule)
+                        _slots[schedulePos.x, schedulePos.y].ShowFailedKeyAction();
+                    await UniTask.WaitForSeconds(0.5f);
+                        
+                    InitializeKeyAction();
                 }
             }
 
             if (keyActionSlots.Count == 0)
             {
+                await UniTask.WaitForSeconds(0.5f);
                 foreach (var schedulePos in lecture.Schedule)
                     _slots[schedulePos.x, schedulePos.y].Confirm();
                 _actioningLecture = null;
@@ -170,6 +182,21 @@ public class UISchedule : MonoBehaviour, IDropHandler
             _slots[schedulePos.x, schedulePos.y].Clear();
         _actioningLecture = null;
         return false;
+        
+        void InitializeKeyAction()
+        {
+            keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
+            keyActionSlots.Clear();
+            foreach (var schedulePos in lecture.Schedule)
+            {
+                var randIdx = Random.Range(0, keyCodes.Count);
+                _slots[schedulePos.x, schedulePos.y].ShowKeyAction(typeColor, keyCodes[randIdx], 3f);
+                keyActionSlots.Add(keyCodes[randIdx], _slots[schedulePos.x, schedulePos.y]);
+                keyCodes.RemoveAt(randIdx);
+            }
+            keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
+            elapsedTime = 0;
+        }
     }
 
     public void OnDrop(PointerEventData eventData)

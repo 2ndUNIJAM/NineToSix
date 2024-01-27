@@ -67,6 +67,13 @@ public class UIScheduleSlot : MonoBehaviour
         radialSlider.DOFillAmount(1, 0.3f);
     }
 
+    public void ShowFailedKeyAction()
+    {
+        _isOnKeyAction = false;
+        radialSlider.DOFillAmount(1, 0.3f);
+        keyActionText.text = "X";
+    }
+
     public void Confirm()
     {
         _filled = true;
