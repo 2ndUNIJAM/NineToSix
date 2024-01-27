@@ -22,6 +22,9 @@ public class UISpawnedLecture : MonoBehaviour
 
     private void Update()
     {
+        if (lectureComponent.IsDragging || lectureComponent.IsKeyActionTarget)
+            return;
+        
         if (_elapsedTime < _timeLimit)
         {
             _elapsedTime += Time.deltaTime;
@@ -34,6 +37,9 @@ public class UISpawnedLecture : MonoBehaviour
 
     public void Initialize(Lecture lecture)
     {
+        _timeLimit = lecture.TimeLimit;
+        timerSlider.maxValue = _timeLimit;
+        timerSlider.value = _timeLimit;
         _elapsedTime = 0;
 
         lectureComponent.SetLecture(lecture);
@@ -44,7 +50,7 @@ public class UISpawnedLecture : MonoBehaviour
     {
         Removed?.Invoke();
         
-        if (lectureComponent.transform.parent != transform)
+        if (lectureComponent && lectureComponent.transform.parent != transform)
             Destroy(lectureComponent.gameObject);
         Destroy(gameObject);
     }

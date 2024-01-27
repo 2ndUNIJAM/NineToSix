@@ -70,18 +70,6 @@ public class GameLogicManager : MonoBehaviour
         return _selectedLectures;
     }
 
-    public void GenerateNewLecture()
-    {
-        int randIdx = Random.Range(0, _lectureData.Count);
-        var newLecture = new Lecture(_lectureData[randIdx]);
-        lectureSpawner.SpawnLecture(newLecture);
-        _lectureData.RemoveAt(randIdx);
-
-        // 다 떨어졌으면 다시 로드합니다. 근데 설마 다 떨어지겠어
-        if (_lectureData.Count == 0)
-            _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
-    }
-
     public bool TryReserveLecture(Lecture lecture)
     {
         if (lectureBucket.IsFull)
@@ -115,7 +103,7 @@ public class GameLogicManager : MonoBehaviour
     {
         var lecture = _holdingLectureComponent.Lecture;
         
-        if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= _activeStudent.GetStudentMaxCredit())
+        if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= 18)
         {
             var succeed = await schedule.StartLectureKeyAction(lecture);
             if (succeed)

@@ -9,6 +9,8 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 {
     public bool IsDragging => _isDragging;
 
+    public bool IsKeyActionTarget => manager.Schedule.ActioningLecture == _lecture;
+
     public Lecture Lecture => _lecture;
 
     public event Action RemoveRequested;
@@ -17,11 +19,18 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private TextMeshProUGUI lectureName;
     [SerializeField] private UIHighlightedText highTextTemplate;
     [SerializeField] private RectTransform highTextParent;
+    [SerializeField] private UIStarGauge starGauge;
     [SerializeField] private Transform dragParent;
 
     private bool _isDragging;
     private Transform _originParent;
     private Lecture _lecture;
+
+    private void OnDestroy()
+    {
+        if (manager.Schedule.PreviewingLecture == _lecture)
+            manager.Schedule.HideLecturePreview();
+    }
 
     public void SetLecture(Lecture lecture)
     {
@@ -58,6 +67,8 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             if ((_lecture.Data.TargetGrade & ELectureGrade.Fourth) != 0)
                 CreateHighlightedText(Color.yellow, "4학년");
         }
+        // 별점
+        starGauge.SetValue(_lecture.Rating);
     }
 
     private void CreateHighlightedText(Color color, string text)
@@ -80,11 +91,13 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        manager.Schedule.HideLecturePreview();
+        if (!_isDragging)
+            manager.Schedule.HideLecturePreview();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        _isDragging = true;
         manager.HoldLecture(this);
         _originParent = transform.parent;
         transform.SetParent(dragParent);
@@ -101,6 +114,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         transform.SetParent(_originParent);
         transform.localPosition = Vector3.zero;
         GetComponent<CanvasGroup>().blocksRaycasts = true;
-        manager.UnholdLecture();
+        _isDragging = false;
+        manager.Schedule.HideLecturePreview();
     }
 }
