@@ -21,6 +21,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private RectTransform highTextParent;
     [SerializeField] private UIStarGauge starGauge;
     [SerializeField] private Transform dragParent;
+    [SerializeField] private bool preventRightClick = false;
 
     private bool _isDragging;
     private Transform _originParent;
@@ -35,7 +36,10 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void SetLecture(Lecture lecture)
     {
+        // 초기화
         _lecture = lecture;
+        _isDragging = false;
+        GetComponent<CanvasGroup>().blocksRaycasts = true;
         
         lectureName.text = _lecture.Data.Name;
         // 과목분류
@@ -139,6 +143,8 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (preventRightClick)
+            return;
         if (manager.IsHoldingLecture)
             return;
         if (eventData.button != PointerEventData.InputButton.Right)

@@ -78,6 +78,13 @@ public class GameLogicManager : MonoBehaviour
         _holdingLectureComponent = null;
     }
 
+    public void TrashLecture()
+    {
+        schedule.HideLecturePreview();
+        _holdingLectureComponent.Remove();
+        UnholdLecture();
+    }
+
     public async UniTaskVoid TrySelectHoldingLecture()
     {
         var lecture = _holdingLectureComponent.Lecture;

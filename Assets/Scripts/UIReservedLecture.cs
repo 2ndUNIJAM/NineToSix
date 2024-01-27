@@ -29,6 +29,8 @@ public class UIReservedLecture : MonoBehaviour
     public void RemoveLecture()
     {
         Removed?.Invoke();
+        lectureComponent.transform.SetParent(transform);
+        lectureComponent.transform.localPosition = Vector3.zero;
         lectureComponent.gameObject.SetActive(false);
         _isEmpty = true;
     }
