@@ -1,5 +1,9 @@
 [
   { "id": 0, "type": 0, "rec_grade": 15, "name": "뒹굴역학" },
   { "id": 1, "type": 2, "rec_grade": 1, "name": "침대매트리스개론" },
-  { "id": 2, "type": 1, "rec_grade": 12, "name": "집가고싶다" }
+  { "id": 2, "type": 1, "rec_grade": 12, "name": "집가고싶다" },
+  { "id": 3, "type": 2, "rec_grade": 1, "name": "전공필수테스트1" },
+  { "id": 4, "type": 2, "rec_grade": 2, "name": "전공필수테스트2" },
+  { "id": 5, "type": 2, "rec_grade": 4, "name": "전공필수테스트3" },
+  { "id": 6, "type": 2, "rec_grade": 8, "name": "전공필수테스트4" }
 ]

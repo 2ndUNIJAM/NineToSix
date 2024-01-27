@@ -22,7 +22,7 @@ public class GameLogicManager : MonoBehaviour
     [SerializeField] private UILectureSpawner lectureSpawner;
     [SerializeField] private UILectureBucket lectureBucket;
     [SerializeField] private GameObject actionDimmer;
-    
+
     List<Student> studentList;
     private int _activeStudentIndex;
 
@@ -42,15 +42,18 @@ public class GameLogicManager : MonoBehaviour
 
     private void Start()
     {
-        _lectureJson = Resources.Load<TextAsset>("lectures");
-
-        // Load lecture
-        _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
-
+        //LectureData Should Be Loaded First
+        LoadLecture();
         LoadStudent();
         VisualizeStudent();
 
         _currentScore = 0;
+    }
+
+    private void LoadLecture()
+    {
+        _lectureJson = Resources.Load<TextAsset>("lectures");
+        _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
     }
 
     private void LoadStudent()
@@ -83,6 +86,11 @@ public class GameLogicManager : MonoBehaviour
     public IEnumerable<Lecture> GetSelectedLectures()
     {
         return _selectedLectures;
+    }
+
+    public IEnumerable<LectureData> GetLectureData()
+    {
+        return _lectureData;
     }
 
     public bool TryReserveLecture(Lecture lecture)
