@@ -31,15 +31,19 @@ public class UIScheduleSlot : MonoBehaviour
 
     public void StartPreview(Color color)
     {
-        _tween = DOTween.Sequence()
-            .Append(colorGraphic.DOColor(color, 0.3f).SetEase(Ease.InCubic))
-            .Append(colorGraphic.DOColor(_fillColor, 0.3f).SetEase(Ease.OutCubic))
-            .SetLoops(-1).Play();
+        if (_filled)
+            _tween = DOTween.Sequence()
+                .Append(colorGraphic.DOColor(Color.black, 0.3f).SetEase(Ease.InCubic))
+                .Append(colorGraphic.DOColor(_fillColor, 0.3f).SetEase(Ease.OutCubic))
+                .SetLoops(-1).Play();
+        else
+            colorGraphic.color = new Color(color.r, color.g, color.b, 0.5f);
     }
 
     public void StopPreview()
     {
-        _tween.Kill();
+        if (_tween != null && _tween.active)
+            _tween.Kill();
         colorGraphic.color = _fillColor;
     }
 

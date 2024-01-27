@@ -12,6 +12,8 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public bool IsKeyActionTarget => manager.Schedule.ActioningLecture == _lecture;
 
+    public bool IsBeingRemoved => _isBeingRemoved;
+
     public Lecture Lecture => _lecture;
 
     public event Action RemoveRequested;
@@ -24,7 +26,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private Transform dragParent;
     [SerializeField] private bool preventRightClick = false;
 
-    private bool _isDragging;
+    private bool _isDragging, _isBeingRemoved;
     private Transform _originParent;
     private Lecture _lecture;
     private List<GameObject> _highTexts = new List<GameObject>();
@@ -99,6 +101,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void Remove()
     {
+        _isBeingRemoved = true;
         GetComponent<CanvasGroup>().blocksRaycasts = false;
         DOTween.Sequence()
             .Append(transform.DOScale(new Vector3(0, 0, 1), 0.2f))
@@ -127,9 +130,6 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (!preventRightClick)
-            return;
-        
         Debug.Log("Started dragging.");
         _isDragging = true;
         manager.HoldLecture(this);
@@ -140,17 +140,11 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (!preventRightClick)
-            return;
-        
         transform.position = eventData.pointerCurrentRaycast.worldPosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (!preventRightClick)
-            return;
-        
         transform.SetParent(_originParent);
         transform.localPosition = Vector3.zero;
         GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -166,16 +160,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (preventRightClick)
-            return;
-
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            var succeed = manager.TryReserveLecture(_lecture);
-            if (succeed)
-                Remove();
-        }
-        else if (eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
             Remove();
         }

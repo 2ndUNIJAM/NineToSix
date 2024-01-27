@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class UILectureBucket : MonoBehaviour
+public class UILectureBucket : MonoBehaviour, IDropHandler
 {
     public bool IsFull => _reservedCount == 4;
-    
+
+    [SerializeField] private GameLogicManager manager;
     [SerializeField] private UIReservedLecture[] reserveSlots;
 
     private int _reservedCount;
@@ -30,8 +32,25 @@ public class UILectureBucket : MonoBehaviour
         }
     }
 
+    public bool ContainsLecture(Lecture lecture)
+    {
+        foreach (var slot in reserveSlots)
+        {
+            if (!slot.IsEmpty && slot.HasLecture(lecture))
+                return true;
+        }
+
+        return false;
+    }
+
     private void OnLectureRemove()
     {
         _reservedCount--;
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (manager.IsHoldingLecture)
+            manager.TryReserveHoldingLecture();
     }
 }

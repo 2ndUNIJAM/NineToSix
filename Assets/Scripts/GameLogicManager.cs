@@ -93,13 +93,17 @@ public class GameLogicManager : MonoBehaviour
         return _lectureData;
     }
 
-    public bool TryReserveLecture(Lecture lecture)
+    public void TryReserveHoldingLecture()
     {
-        if (lectureBucket.IsFull)
-            return false;
+        var lecture = _holdingLectureComponent.Lecture;
 
-        lectureBucket.ReserveLecture(lecture);
-        return true;
+        if (!lectureBucket.IsFull && !lectureBucket.ContainsLecture(lecture))
+        {
+            lectureBucket.ReserveLecture(lecture);
+            _holdingLectureComponent.Remove();
+        }
+        
+        UnholdLecture();
     }
 
     public void HoldLecture(UILecture lecture)
