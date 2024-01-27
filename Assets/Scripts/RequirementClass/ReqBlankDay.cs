@@ -52,12 +52,22 @@ public class ReqBlankDay : RequirementBase
 
     public override bool DoesMeetRequirement()
     {
-        if(needSpecificDay) 
+        if(!needSpecificDay) // 아무요일 1일 공강 사수
         { 
-        
+            for(int i=0; i<5; ++i)
+            {
+                if (finalSchedule.IsColumnClear(i)) 
+                    return true;
+            }
+            return false;
         }
-
-        throw new System.NotImplementedException();
+        else // 특정요일 공강 사수
+        {
+            if (finalSchedule.IsColumnClear(needDay))
+                return true;
+            else 
+                return false;
+        }
     }
 
 }

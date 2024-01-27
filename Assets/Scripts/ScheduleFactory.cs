@@ -12,7 +12,7 @@ public static class ScheduleFactory
     }
 
     // int값 따라서 생성 1학점이면 1개, 2학점이면 2개, 3학점이면 3개 셀 
-    static List<Vector2Int> GenerateLectureBlock(int credit)
+    public static List<Vector2Int> GenerateLectureBlock(int credit)
     {
         List<Vector2Int> scheduleBlock = new List<Vector2Int>();
 
@@ -88,7 +88,7 @@ public static class ScheduleFactory
                         yPos = Random.Range(yMin, yMax-1);
                     }
 
-                    scheduleBlock.Add(new Vector2Int(xMin, yPos));
+                    scheduleBlock.Add(new Vector2Int(xPos, yPos));
                     
                     // 좌 우 블록 중 하나 생성
                     if(generateLeft)
