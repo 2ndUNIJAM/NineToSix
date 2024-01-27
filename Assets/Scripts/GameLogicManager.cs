@@ -21,7 +21,11 @@ public class GameLogicManager : MonoBehaviour
     [SerializeField] private UISchedule schedule;
     [SerializeField] private UILectureSpawner lectureSpawner;
     [SerializeField] private UILectureBucket lectureBucket;
+    [SerializeField] private UIScore score;
+    [SerializeField] private UITimer timer;
+    [SerializeField] private UICredit credit;
     [SerializeField] private GameObject actionDimmer;
+    [SerializeField] private RankingData rankingData;
 
     List<Student> studentList;
     private int _activeStudentIndex;
@@ -34,6 +38,9 @@ public class GameLogicManager : MonoBehaviour
 
     private int _currentCredit;
     private int _currentScore;
+    private float _currentAbsoluteTime;
+
+    private const int timeLimit = 270;
 
     private void Awake()
     {
@@ -48,6 +55,17 @@ public class GameLogicManager : MonoBehaviour
         VisualizeStudent();
 
         _currentScore = 0;
+        _currentAbsoluteTime = 0;
+        score.Initialize();
+    }
+
+    private void Update()
+    {
+        _currentAbsoluteTime += Time.deltaTime;
+        timer.UpdateTime(_currentAbsoluteTime);
+
+        if (_currentAbsoluteTime >= timeLimit)
+            Tryquit();
     }
 
     private void LoadLecture()
@@ -66,6 +84,7 @@ public class GameLogicManager : MonoBehaviour
             studentList.Add(new Student(studentNames[i], i));
         }
         _activeStudentIndex = 0;
+        credit.ResetCredit(studentList[_activeStudentIndex].GetStudentMaxCredit());
     }
 
     private void VisualizeStudent()
@@ -123,7 +142,7 @@ public class GameLogicManager : MonoBehaviour
         UnholdLecture();
 
         // 장바구니의 강의를 드랍했을 경우 -5 
-        UpdateScore(-5);
+        AddScore(-5);
     }
 
     public async UniTaskVoid TrySelectHoldingLecture()
@@ -137,17 +156,17 @@ public class GameLogicManager : MonoBehaviour
             var succeed = await schedule.StartLectureKeyAction(lecture);
             if (succeed)
             {
+                AddCredit(lecture.Credit);
                 _selectedLectures.Add(lecture);
-                _currentCredit += lecture.Credit;
                 _holdingLectureComponent.Remove();
                 currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
                 // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
-                UpdateScore(10);
+                AddScore(10);
             }
             else
             {
                 // 과목의 수강신청 확정을 실패했을 경우 -5 
-                UpdateScore(-5);
+                AddScore(-5);
             }
             UnholdLecture();
             actionDimmer.SetActive(false);
@@ -168,7 +187,7 @@ public class GameLogicManager : MonoBehaviour
         int bonusWeight = 100;// 보너스 가중치
         float reqWeight = studentList[_activeStudentIndex].GetLastRequirement().DoesMeetRequirement() ? 1.15f : 1; // 요구사항 가중치
         int confirmScore = (int)((basicScore + bonusWeight * (21 - _currentCredit) / (21 - _currentCredit + bonusScore)) * reqWeight);
-        UpdateScore(confirmScore);
+        AddScore(confirmScore);
 
 
 
@@ -176,13 +195,14 @@ public class GameLogicManager : MonoBehaviour
         // 학생의 필수 요청사항을 못 지킨 상태로 시간표를 확정했을 경우 -25 
         if (!studentList[_activeStudentIndex].GetFirstRequirement().DoesMeetRequirement()
             || !studentList[_activeStudentIndex].GetSecondRequirement().DoesMeetRequirement())
-            UpdateScore(-25);
+            AddScore(-25);
 
 
         // 조건: activestudentIndex+1, studentList length  초과 시 게임 종료
-        if(++_activeStudentIndex >= studentList.Count) 
+        if (++_activeStudentIndex >= studentList.Count)
         {
             // 게임 종료
+            Tryquit();
         }
         else
         {
@@ -194,11 +214,25 @@ public class GameLogicManager : MonoBehaviour
 
             // 수강학점 초기화
             _currentCredit = 0;
+            credit.ResetCredit(studentList[_activeStudentIndex].GetStudentMaxCredit());
         }
     }
 
-    void UpdateScore(int score)
+    void AddScore(int score)
     {
         _currentScore += score;
+        this.score.UpdateScore(score);
+    }
+
+    void AddCredit(int credit)
+    {
+        _currentCredit += credit;
+        this.credit.UpdateCredit(_currentCredit);
+    }
+
+    private void Tryquit()
+    {
+        rankingData.AddRanking(_currentScore);
+        GameManager.Instance.Quit();
     }
 }
