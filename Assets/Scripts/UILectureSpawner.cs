@@ -10,7 +10,8 @@ public class UILectureSpawner : MonoBehaviour
     public event Action SpawnedLectureVanished;
 
     public event Action SpawnedLectureProcessed;
-    
+
+    [SerializeField] private GameLogicManager manager;
     [SerializeField] private UISpawnedLecture lectureTemplate;
     [SerializeField] private RectTransform lectureParent;
 
@@ -52,10 +53,16 @@ public class UILectureSpawner : MonoBehaviour
     private void OnSpawnedLectureRemoved(int index, bool vanished)
     {
         if (vanished)
+        {
             SpawnedLectureVanished?.Invoke();
+            manager.AddScore(-3);
+        }
         else
+        {
             SpawnedLectureProcessed?.Invoke();
-        
+            manager.AddScore(2);
+        }
+
         SpawnNewLecture(index);
     }
 }

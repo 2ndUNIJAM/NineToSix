@@ -766,7 +766,6 @@ MonoBehaviour:
   highTextParent: {fileID: 1557799448}
   starGauge: {fileID: 802748432}
   dragParent: {fileID: 1400406436}
-  preventRightClick: 1
 --- !u!114 &110342446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3555,7 +3554,6 @@ MonoBehaviour:
   highTextParent: {fileID: 1779240146}
   starGauge: {fileID: 347321459}
   dragParent: {fileID: 1400406436}
-  preventRightClick: 1
 --- !u!114 &547441349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9634,7 +9632,6 @@ MonoBehaviour:
   highTextParent: {fileID: 645761709}
   starGauge: {fileID: 1674939427}
   dragParent: {fileID: 1400406436}
-  preventRightClick: 0
 --- !u!1 &1400406432
 GameObject:
   m_ObjectHideFlags: 0
@@ -13277,7 +13274,6 @@ MonoBehaviour:
   highTextParent: {fileID: 233150680}
   starGauge: {fileID: 1980279183}
   dragParent: {fileID: 1400406436}
-  preventRightClick: 1
 --- !u!114 &1798328364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15471,7 +15467,6 @@ MonoBehaviour:
   highTextParent: {fileID: 1238457443}
   starGauge: {fileID: 39536178}
   dragParent: {fileID: 1400406436}
-  preventRightClick: 1
 --- !u!225 &2121264841
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -15909,6 +15904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a84327b361949a4bf8a9e20b3519ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  manager: {fileID: 33359475}
   lectureTemplate: {fileID: 943807077}
   lectureParent: {fileID: 1001210809}
 --- !u!1660057539 &9223372036854775807

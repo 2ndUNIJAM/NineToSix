@@ -46,6 +46,12 @@ public class UILectureBucket : MonoBehaviour, IDropHandler
     private void OnLectureRemove(bool forced)
     {
         _reservedCount--;
+        
+        if(forced)
+        {
+            manager.AddScore(-5);
+        }
+
     }
 
     public void OnDrop(PointerEventData eventData)

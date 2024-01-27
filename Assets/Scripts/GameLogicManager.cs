@@ -176,11 +176,12 @@ public class GameLogicManager : MonoBehaviour
                 AddScore(10);
                 SoundManager.Instance.PlaySound(EBGMType.PutLecture);
             }
-            else
+/*            else
             {
                 // 과목의 수강신청 확정을 실패했을 경우 -5 
                 AddScore(-5);
-            }
+            }*/
+
             UnholdLecture();
             actionDimmer.SetActive(false);
             _isOnAction = false;
@@ -204,6 +205,9 @@ public class GameLogicManager : MonoBehaviour
         int confirmScore = (int)((basicScore + bonusWeight * (21 - _currentCredit) / (21 - _currentCredit + bonusScore)) * reqWeight);
         AddScore(confirmScore);
 
+        /*Debug.Log($"요구사항 T/F 디버그: {studentList[_activeStudentIndex].GetFirstRequirement().DoesMeetRequirement()} / " +
+            $"{studentList[_activeStudentIndex].GetSecondRequirement().DoesMeetRequirement()} / " +
+            $"{studentList[_activeStudentIndex].GetLastRequirement().DoesMeetRequirement()} ");*/
 
         // 학생의 필수 요청사항을 못 지킨 상태로 시간표를 확정했을 경우 -25 
         if (!studentList[_activeStudentIndex].GetFirstRequirement().DoesMeetRequirement()
@@ -238,7 +242,7 @@ public class GameLogicManager : MonoBehaviour
         }
     }
 
-    void AddScore(int score)
+    public void AddScore(int score)
     {
         _currentScore += score;
         this.score.UpdateScore(_currentScore);
