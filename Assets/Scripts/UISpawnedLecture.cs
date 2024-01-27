@@ -26,7 +26,7 @@ public class UISpawnedLecture : MonoBehaviour
 
     private void Update()
     {
-        if (lectureComponent.IsDragging || lectureComponent.IsKeyActionTarget)
+        if (lectureComponent.IsDragging || lectureComponent.IsKeyActionTarget || lectureComponent.IsBeingRemoved)
             return;
         
         if (_elapsedTime < _timeLimit)

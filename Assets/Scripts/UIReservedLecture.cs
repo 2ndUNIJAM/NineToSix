@@ -34,4 +34,6 @@ public class UIReservedLecture : MonoBehaviour
         lectureComponent.gameObject.SetActive(false);
         _isEmpty = true;
     }
+
+    public bool HasLecture(Lecture lecture) => lecture == lectureComponent.Lecture;
 }
