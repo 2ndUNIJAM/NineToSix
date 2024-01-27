@@ -61,7 +61,6 @@ public class SoundManager : MonoBehaviour
         for (int i = 0; i < speakers.Length; ++i)
         {
             speakers[i].GetComponent<AudioSource>().clip = soundEffects[i];
-            Debug.Log(speakers[i].GetComponent<AudioSource>().clip);
         }
     }
     

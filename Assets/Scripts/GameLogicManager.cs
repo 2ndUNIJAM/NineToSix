@@ -16,6 +16,8 @@ public class GameLogicManager : MonoBehaviour
 
     public int CurrentScore => _currentScore;
 
+    public int CurrentCredit => _currentCredit;
+
     [SerializeField] private UICurrentStudent currentStudent;
     [SerializeField] private UINextStudent nextStudent1, nextStudent2;
     [SerializeField] private UISchedule schedule;
@@ -68,8 +70,10 @@ public class GameLogicManager : MonoBehaviour
         timer.UpdateTime(_currentAbsoluteTime);
 
         if (_currentAbsoluteTime >= timeLimit)
+        {
             EndGame();
-        else if (_currentAbsoluteTime > 260 && !SoundManager.Instance.IsPlaying(EBGMType.GameOverImminent));
+        }
+        else if (_currentAbsoluteTime > 260 && !SoundManager.Instance.IsPlaying(EBGMType.GameOverImminent))
         {
             SoundManager.Instance.PlaySound(EBGMType.GameOverImminent);
         }
@@ -183,13 +187,14 @@ public class GameLogicManager : MonoBehaviour
         }
     }
 
-    public void ConfirmSchedule() // 확정함수
+    public void ConfirmSchedule() 
     {
         // 제한시간 내에 실시간 수강신청란의 과목을 제거한 경우 +2 > TODO
         // 제한시간 내에 실시간 수강신청란의 과목을 제거하지 못한 경우 -3 > TODO
         // 수강신청 현황란의 강의를 드랍했을 경우 -10 > TODO
-        _confirmCount++;
+        if (_currentCredit < 15) return; // 15학점 미만인 경우 
 
+        _confirmCount++;
 
         // 선택 요청사항을 만족한 상태로 시간표를 확정했을 경우 (식 활용) 
         int basicScore = 50; // 기본 점수
@@ -198,10 +203,6 @@ public class GameLogicManager : MonoBehaviour
         float reqWeight = studentList[_activeStudentIndex].GetLastRequirement().DoesMeetRequirement() ? 1.15f : 1; // 요구사항 가중치
         int confirmScore = (int)((basicScore + bonusWeight * (21 - _currentCredit) / (21 - _currentCredit + bonusScore)) * reqWeight);
         AddScore(confirmScore);
-
-
-
-
 
 
         // 학생의 필수 요청사항을 못 지킨 상태로 시간표를 확정했을 경우 -25 
@@ -241,6 +242,7 @@ public class GameLogicManager : MonoBehaviour
     {
         _currentScore += score;
         this.score.UpdateScore(_currentScore);
+        Debug.Log($"AddScore Called with score: {score}");
     }
 
     void AddCredit(int credit)
@@ -251,6 +253,8 @@ public class GameLogicManager : MonoBehaviour
 
     private void EndGame()
     {
+        SoundManager.Instance.StopSound(EBGMType.GameOverImminent);
+
         rankingData.AddRanking(_currentScore, _confirmCount);
         gameEnd.gameObject.SetActive(true);
         gameEnd.Init(rankingData);
