@@ -99,7 +99,7 @@ public class GameLogicManager : MonoBehaviour
         _holdingLectureComponent = null;
     }
 
-    public void TrashLecture()
+    public void TrashHoldingLecture()
     {
         schedule.HideLecturePreview();
         _holdingLectureComponent.Remove();
