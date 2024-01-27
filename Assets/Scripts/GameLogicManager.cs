@@ -191,13 +191,13 @@ public class GameLogicManager : MonoBehaviour
                 switch(lecture.Credit)
                 {
                     case 1:
-                        AddScore(5);
+                        AddScore(2);
                         break;
                     case 2:
-                        AddScore(8);
+                        AddScore(3);
                         break;
                     case 3:
-                        AddScore(10);
+                        AddScore(5);
                         break;
                 }
                 SoundManager.Instance.PlaySound(EBGMType.PutLecture);
@@ -231,10 +231,9 @@ public class GameLogicManager : MonoBehaviour
 
         // 선택 요청사항을 만족한 상태로 시간표를 확정했을 경우 (식 활용) 
         int basicScore = 50; // 기본 점수
-        int bonusScore = 35; // 보너스 상수
-        int bonusWeight = 100;// 보너스 가중치
+        float bonusScore = 1.5f; // 보너스 상수
         float reqWeight = studentList[_activeStudentIndex].GetLastRequirement().DoesMeetRequirement() ? 1.15f : 1; // 요구사항 가중치
-        int confirmScore = (int)((basicScore + bonusWeight * (21 - _currentCredit) / (21 - _currentCredit + bonusScore)) * reqWeight);
+        int confirmScore = (int)((basicScore + Mathf.Pow(bonusScore, _currentCredit-15)) * reqWeight);
         AddScore(confirmScore);
 
         /*Debug.Log($"요구사항 T/F 디버그: {studentList[_activeStudentIndex].GetFirstRequirement().DoesMeetRequirement()} / " +

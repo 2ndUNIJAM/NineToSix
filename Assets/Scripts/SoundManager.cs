@@ -6,12 +6,15 @@ using UnityEngine;
 
 public enum EBGMType // Resources/Sound 폴더 내 파일과 일치해야 함
 {
-    ClickButton,
+    ClickButton, // 0
     PutLecture,
     RemoveLecture,
     GoodConfirm,
     BadConfirm,
-    GameOverImminent,
+    GameOverImminent, // 5
+    SerialHit1,
+    SerialHit2,
+    SerialHit3,
     InGameBGM
     // 시작화면 bgm 추가 필요
 }

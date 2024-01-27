@@ -128,7 +128,7 @@ public class UILectureSpawner : MonoBehaviour
         if (vanished)
         {
             SpawnedLectureVanished?.Invoke();
-            manager.AddScore(-3);
+            manager.AddScore(-1);
         }
         else if (forced)
         {
