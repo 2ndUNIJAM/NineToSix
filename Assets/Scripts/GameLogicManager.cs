@@ -22,6 +22,7 @@ public class GameLogicManager : MonoBehaviour
     [SerializeField] private UILectureSpawner lectureSpawner;
     [SerializeField] private UILectureBucket lectureBucket;
     [SerializeField] private UIScore score;
+    [SerializeField] private UITimer timer;
     [SerializeField] private GameObject actionDimmer;
     [SerializeField] private RankingData rankingData;
 
@@ -36,6 +37,9 @@ public class GameLogicManager : MonoBehaviour
 
     private int _currentCredit;
     private int _currentScore;
+    private float _currentAbsoluteTime;
+
+    private const int timeLimit = 270;
 
     private void Awake()
     {
@@ -50,7 +54,17 @@ public class GameLogicManager : MonoBehaviour
         VisualizeStudent();
 
         _currentScore = 0;
+        _currentAbsoluteTime = 0;
         score.Initialize();
+    }
+
+    private void Update()
+    {
+        _currentAbsoluteTime += Time.deltaTime;
+        timer.UpdateTime(_currentAbsoluteTime);
+
+        if (_currentAbsoluteTime >= timeLimit)
+            Tryquit();
     }
 
     private void LoadLecture()
@@ -182,8 +196,7 @@ public class GameLogicManager : MonoBehaviour
         if (++_activeStudentIndex >= studentList.Count)
         {
             // 게임 종료
-            rankingData.AddRanking(_currentScore);
-            GameManager.Instance.Quit();
+            Tryquit();
         }
         else
         {
@@ -202,5 +215,11 @@ public class GameLogicManager : MonoBehaviour
     {
         _currentScore += score;
         this.score.UpdateScore(score);
+    }
+
+    private void Tryquit()
+    {
+        rankingData.AddRanking(_currentScore);
+        GameManager.Instance.Quit();
     }
 }
