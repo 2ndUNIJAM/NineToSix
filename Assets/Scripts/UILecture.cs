@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public bool IsDragging => _isDragging;
 
@@ -25,6 +25,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private bool _isDragging;
     private Transform _originParent;
     private Lecture _lecture;
+    private List<GameObject> _highTexts = new List<GameObject>();
 
     private void OnDestroy()
     {
@@ -38,6 +39,10 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         
         lectureName.text = _lecture.Data.Name;
         // 과목분류
+        foreach (var obj in _highTexts)
+            Destroy(obj);
+        _highTexts.Clear();
+        
         var typeColor = _lecture.Data.Type switch
         {
             ELectureType.LiberalArt => Color.cyan,
@@ -77,6 +82,7 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         highText.Initialize(color, text);
         highText.transform.localScale = Vector3.one;
         highText.gameObject.SetActive(true);
+        _highTexts.Add(highText.gameObject);
     }
 
     public void Remove()
@@ -129,5 +135,17 @@ public class UILecture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             manager.UnholdLecture();
         }
         Debug.Log("Ended dragging.");
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (manager.IsHoldingLecture)
+            return;
+        if (eventData.button != PointerEventData.InputButton.Right)
+            return;
+
+        var succeed = manager.TryReserveLecture(_lecture);
+        if (succeed)
+            Remove();
     }
 }
