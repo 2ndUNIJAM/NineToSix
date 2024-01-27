@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,16 +10,19 @@ using UnityEngine.Serialization;
 
 public class UISpawnedLecture : MonoBehaviour
 {
-    public event Action Removed;
+    public event Action<int, bool> Removed;
     
     [SerializeField] private UILecture lectureComponent;
     [SerializeField] private Slider timerSlider;
     // TODO: 별 슬라이더 추가
 
+    private int _index;
     private int _timeLimit;
     private float _elapsedTime;
     private UILecture _ghostGraphic;
     private RectTransform _rectTransform;
+
+    private bool _isVanishing;
 
     private void Update()
     {
@@ -31,12 +35,16 @@ public class UISpawnedLecture : MonoBehaviour
             timerSlider.value = _timeLimit - _elapsedTime;
 
             if (_elapsedTime >= _timeLimit)
-                Remove();
+            {
+                _isVanishing = true;
+                lectureComponent.Remove();
+            }
         }
     }
 
-    public void Initialize(Lecture lecture)
+    public void Initialize(Lecture lecture, int index)
     {
+        _index = index;
         _timeLimit = lecture.TimeLimit;
         timerSlider.maxValue = _timeLimit;
         timerSlider.value = _timeLimit;
@@ -46,9 +54,9 @@ public class UISpawnedLecture : MonoBehaviour
         lectureComponent.RemoveRequested += Remove;
     }
 
-    public void Remove()
+    private void Remove()
     {
-        Removed?.Invoke();
+        Removed?.Invoke(_index, !_isVanishing);
         
         if (lectureComponent && lectureComponent.transform.parent != transform)
             Destroy(lectureComponent.gameObject);
