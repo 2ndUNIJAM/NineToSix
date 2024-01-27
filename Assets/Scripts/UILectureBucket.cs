@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,12 @@ public class UILectureBucket : MonoBehaviour
 
     private int _reservedCount;
 
+    private void Start()
+    {
+        foreach (var slot in reserveSlots)
+            slot.Removed += OnLectureRemove;
+    }
+
     public void ReserveLecture(Lecture lecture)
     {
         foreach (var slot in reserveSlots)
@@ -21,5 +28,10 @@ public class UILectureBucket : MonoBehaviour
                 return;
             }
         }
+    }
+
+    private void OnLectureRemove()
+    {
+        _reservedCount--;
     }
 }
