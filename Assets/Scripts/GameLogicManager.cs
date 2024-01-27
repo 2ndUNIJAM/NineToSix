@@ -14,6 +14,8 @@ public class GameLogicManager : MonoBehaviour
 
     public bool IsOnAction => _isOnAction;
 
+    public int CurrentScore => _currentScore;
+
     [SerializeField] private UICurrentStudent currentStudent;
     [SerializeField] private UINextStudent nextStudent1, nextStudent2;
     [SerializeField] private UISchedule schedule;
@@ -31,6 +33,7 @@ public class GameLogicManager : MonoBehaviour
     private bool _isOnAction;
 
     private int _currentCredit;
+    private int _currentScore;
 
     private void Awake()
     {
@@ -43,6 +46,8 @@ public class GameLogicManager : MonoBehaviour
         LoadLecture();
         LoadStudent();
         VisualizeStudent();
+
+        _currentScore = 0;
     }
 
     private void LoadLecture()
@@ -133,5 +138,22 @@ public class GameLogicManager : MonoBehaviour
             actionDimmer.SetActive(false);
             _isOnAction = false;
         }
+    }
+
+    public void ConfirmSchedule() // 확정함수
+    {
+        // 0. 점수 계산 
+
+
+
+        // 1. 학생 교체 
+        ++_activeStudentIndex;
+        VisualizeStudent();
+
+        // 2. 시간표 클리어 UISchedule.cs에 ClearSlots
+        schedule.ClearSlots();
+
+        // 3. 수강학점 초기화
+        _currentCredit = 0;
     }
 }
