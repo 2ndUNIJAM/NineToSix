@@ -52,6 +52,7 @@ public class GameLogicManager : MonoBehaviour
     {
         var studentJson = Resources.Load<TextAsset>("students");
         var studentNames = JsonConvert.DeserializeObject<List<string>>(studentJson.text);
+        studentList = new List<Student>();
         for (int i = 0; i < studentNames.Count; i++)
         {
             studentList.Add(new Student(studentNames[i], i));

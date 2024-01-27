@@ -11,7 +11,7 @@ public abstract class RequirementBase
     public abstract bool DoesMeetRequirement();
     public void GetLogicManager()
     {
-        GameObject gLogicManagerObj = GameObject.Find("GameLogicManager");
+        GameObject gLogicManagerObj = GameObject.Find("Game Logic Manager");
         gLogicManager = gLogicManagerObj.GetComponent<GameLogicManager>();
     }
 }
