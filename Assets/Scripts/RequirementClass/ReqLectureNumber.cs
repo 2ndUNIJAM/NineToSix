@@ -14,7 +14,7 @@ public class ReqLectureNumber : RequirementBase
     {
         base.GetLogicManager();
 
-        reqLectureType = (ELectureType)Random.Range(0, 3); // 0 1 2 랜덤 생성
+        reqLectureType = (ELectureType)Random.Range(0, 2); // 0 1 랜덤 생성
         string type = string.Empty;
         switch ((int)reqLectureType)
         {
@@ -24,9 +24,9 @@ public class ReqLectureNumber : RequirementBase
             case 1:
                 type = "전공기초";
                 break;
-            case 2:
+/*            case 2:
                 type = "전공필수";
-                break;
+                break;*/
             default:
                 break;
         }
