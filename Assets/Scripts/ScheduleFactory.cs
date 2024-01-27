@@ -11,13 +11,13 @@ public static class ScheduleFactory
         return (Random.Range(0, 2) == 1 ? true : false);
     }
 
-    // int°ª µû¶ó¼­ »ı¼º 1ÇĞÁ¡ÀÌ¸é 1°³, 2ÇĞÁ¡ÀÌ¸é 2°³, 3ÇĞÁ¡ÀÌ¸é 3°³ ¼¿ 
+    // intê°’ ë”°ë¼ì„œ ìƒì„± 1í•™ì ì´ë©´ 1ê°œ, 2í•™ì ì´ë©´ 2ê°œ, 3í•™ì ì´ë©´ 3ê°œ ì…€ 
     static List<Vector2Int> GenerateLectureBlock(int credit)
     {
         List<Vector2Int> scheduleBlock = new List<Vector2Int>();
 
-        // x col(¿äÀÏ) 0~4 / y row(½Ã°£) 0~7
-        // ¿ù¿äÀÏx 1±³½Ãy
+        // x col(ìš”ì¼) 0~4 / y row(ì‹œê°„) 0~7
+        // ì›”ìš”ì¼x 1êµì‹œy
         int xPos = 0, yPos = 0;
         int xMin = 0, xMax = 5;
         int yMin = 0, yMax = 8;
@@ -29,14 +29,14 @@ public static class ScheduleFactory
                 break;
 
             case 2:
-                if(TFRandomDecide()) // ¿À¸¥ÂÊÀ¸·Î ºí·Ï Ãß°¡ÇÏ´Â °æ¿ì
+                if(TFRandomDecide()) // ì˜¤ë¥¸ìª½ìœ¼ë¡œ ë¸”ë¡ ì¶”ê°€í•˜ëŠ” ê²½ìš°
                 {
                     xPos = Random.Range(xMin, xMax-1); // 0 1 2 3 
                     yPos = Random.Range(yMin, yMax);
                     scheduleBlock.Add(new Vector2Int(xPos, yPos));
                     scheduleBlock.Add(new Vector2Int(xPos + 1, yPos));
                 }
-                else // ¾Æ·¡ÂÊÀ¸·Î ºí·Ï Ãß°¡ÇÏ´Â °æ¿ì
+                else // ì•„ë˜ìª½ìœ¼ë¡œ ë¸”ë¡ ì¶”ê°€í•˜ëŠ” ê²½ìš°
                 {
                     xPos = Random.Range(xMin, xMax);
                     yPos = Random.Range(yMin, yMax - 1);
@@ -45,9 +45,9 @@ public static class ScheduleFactory
                 }
                 break;
             case 3:
-                if(TFRandomDecide()) // true: LineÇü
+                if(TFRandomDecide()) // true: Lineí˜•
                 {
-                    if(TFRandomDecide()) // true: ¿À¸¥ÂÊ Àü°³
+                    if(TFRandomDecide()) // true: ì˜¤ë¥¸ìª½ ì „ê°œ
                     {
                         xPos = Random.Range(xMin, xMax - 2);
                         yPos = Random.Range(yMin, yMax);
@@ -55,7 +55,7 @@ public static class ScheduleFactory
                         scheduleBlock.Add(new Vector2Int(xPos+1, yPos));
                         scheduleBlock.Add(new Vector2Int(xPos+2, yPos));
                     }
-                    else // false: ¾Æ·¡ÂÊ Àü°³
+                    else // false: ì•„ë˜ìª½ ì „ê°œ
                     {
                         xPos = Random.Range(xMin, xMax);
                         yPos = Random.Range(yMin, yMax - 2);
@@ -64,33 +64,33 @@ public static class ScheduleFactory
                         scheduleBlock.Add(new Vector2Int(xPos, yPos+2));
                     }
                 }
-                else // ¤¤ÀÚÇü 
+                else // ã„´ìí˜• 
                 {
                     // Set x
                     bool generateLeft = TFRandomDecide();
-                    if(generateLeft) // true: ¿ŞÂÊ »ı¼º
+                    if(generateLeft) // true: ì™¼ìª½ ìƒì„±
                     {
                         xPos = Random.Range(xMin+1, xMax);
                     }
-                    else // false: ¿À¸¥ÂÊ »ı¼º
+                    else // false: ì˜¤ë¥¸ìª½ ìƒì„±
                     {
                         xPos = Random.Range(xMin, xMax-1);
                     }
 
                     // Set y
                     bool generateUp = TFRandomDecide();
-                    if(generateUp) // true: À§ÂÊ »ı¼º
+                    if(generateUp) // true: ìœ„ìª½ ìƒì„±
                     {
                         yPos = Random.Range(yMin + 1, yMax);
                     }
-                    else // ¾Æ·¡ÂÊ »ı¼º
+                    else // ì•„ë˜ìª½ ìƒì„±
                     {
                         yPos = Random.Range(yMin, yMax-1);
                     }
 
                     scheduleBlock.Add(new Vector2Int(xMin, yPos));
                     
-                    // ÁÂ ¿ì ºí·Ï Áß ÇÏ³ª »ı¼º
+                    // ì¢Œ ìš° ë¸”ë¡ ì¤‘ í•˜ë‚˜ ìƒì„±
                     if(generateLeft)
                     {
                         scheduleBlock.Add(new Vector2Int(xPos-1, yPos));
@@ -100,7 +100,7 @@ public static class ScheduleFactory
                         scheduleBlock.Add(new Vector2Int(xPos+1, yPos));
                     }
 
-                    // À§ ¾Æ·¡ ºí·Ï Áß ÇÏ³ª »ı¼º
+                    // ìœ„ ì•„ë˜ ë¸”ë¡ ì¤‘ í•˜ë‚˜ ìƒì„±
                     if(generateUp)
                     {
                         scheduleBlock.Add(new Vector2Int(xPos, yPos-1));
