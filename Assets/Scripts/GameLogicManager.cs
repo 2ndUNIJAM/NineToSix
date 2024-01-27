@@ -133,6 +133,7 @@ public class GameLogicManager : MonoBehaviour
                 _selectedLectures.Add(lecture);
                 _currentCredit += lecture.Credit;
                 _holdingLectureComponent.Remove();
+                currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
             }
             UnholdLecture();
             actionDimmer.SetActive(false);
