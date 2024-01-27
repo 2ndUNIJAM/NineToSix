@@ -28,7 +28,7 @@ public class Student
     private void GenerateRequirements()
     {
         requirements = new RequirementBase[3];
-        var candidate = new RequirementBase[] { new ReqMustLecture(), new ReqLectureNumber(), new ReqAverageRating(), new ReqNeedLunch(), new ReqBlankDay() };
+        var candidate = new RequirementBase[] { new ReqMustLecture(this.grade), new ReqLectureNumber(), new ReqAverageRating(), new ReqNeedLunch(), new ReqBlankDay() };
         var excludeEssential = Random.Range(0, 3);
         var includeOptional = excludeEssential == 2 ? Random.Range(2, 5) : Random.Range(3, 5);
         var essentialIndex = new List<int>();
