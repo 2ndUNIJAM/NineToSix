@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ReqNeedLunch : RequirementBase
-// ¿ùÈ­¼ö¸ñ±İ Á¡½É½Ã°£ 4±³½Ã°¡ ¸ğµÎ ºñ¾îÀÖ¾î¾ß ÇÏ´Â ¿äÃ»»çÇ× 
+// ì›”í™”ìˆ˜ëª©ê¸ˆ ì ì‹¬ì‹œê°„ 4êµì‹œê°€ ëª¨ë‘ ë¹„ì–´ìˆì–´ì•¼ í•˜ëŠ” ìš”ì²­ì‚¬í•­ 
 {
 
     public ReqNeedLunch()

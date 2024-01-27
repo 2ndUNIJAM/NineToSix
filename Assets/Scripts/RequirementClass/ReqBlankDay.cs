@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ReqBlankDay : RequirementBase
-// °ø°­³¯ÀÌ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ¿äÃ»»çÇ×
-// i) Æ¯Á¤ ¿äÀÏ ÁöÁ¤ ÈÄ °ø°­ »ç¼ö
-// ii) ÀÏÁÖÀÏ Áß ÃÖ¼Ò 1ÀÏ °ø°­ »ç¼ö 
+// ê³µê°•ë‚ ì´ ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” ìš”ì²­ì‚¬í•­
+// i) íŠ¹ì • ìš”ì¼ ì§€ì • í›„ ê³µê°• ì‚¬ìˆ˜
+// ii) ì¼ì£¼ì¼ ì¤‘ ìµœì†Œ 1ì¼ ê³µê°• ì‚¬ìˆ˜ 
 {
     UISchedule finalSchedule;
-    bool needSpecificDay; // trueÀÎ °æ¿ì i) ½ÇÇà
+    bool needSpecificDay; // trueì¸ ê²½ìš° i) ì‹¤í–‰
     int needDay;
 
     public ReqBlankDay()
@@ -20,33 +20,33 @@ public class ReqBlankDay : RequirementBase
 
         if (needSpecificDay)
         {
-            needDay = Random.Range(0, 5); // ¿ùÈ­¼ö¸ñ±İ 01234 Áß ·£´ı
+            needDay = Random.Range(0, 5); // ì›”í™”ìˆ˜ëª©ê¸ˆ 01234 ì¤‘ ëœë¤
             string day = string.Empty;
             switch (needDay)
             {
                 case 0:
-                    day = "¿ù¿äÀÏ";
+                    day = "ì›”ìš”ì¼";
                     break;
                 case 1:
-                    day = "È­¿äÀÏ";
+                    day = "í™”ìš”ì¼";
                     break;
                 case 2:
-                    day = "¼ö¿äÀÏ";
+                    day = "ìˆ˜ìš”ì¼";
                     break;
                 case 3:
-                    day = "¸ñ¿äÀÏ";
+                    day = "ëª©ìš”ì¼";
                     break;
                 case 4:
-                    day = "±İ¿äÀÏ";
+                    day = "ê¸ˆìš”ì¼";
                     break;
                 default:
                     break;
             }
-            contentTitle = $"{day} °ø°­ »ç¼ö!";
+            contentTitle = $"{day} ê³µê°• ì‚¬ìˆ˜!";
         }
         else
         {
-            contentTitle = "ÃÖ¼Ò 1ÀÏ °ø°­ »ç¼ö!";
+            contentTitle = "ìµœì†Œ 1ì¼ ê³µê°• ì‚¬ìˆ˜!";
         }
     }
 
