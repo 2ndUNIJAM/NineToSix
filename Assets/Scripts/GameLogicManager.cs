@@ -18,12 +18,12 @@ public class GameLogicManager : MonoBehaviour
     [SerializeField] private UISchedule schedule;
     [SerializeField] private UILectureSpawner lectureSpawner;
     [SerializeField] private UILectureBucket lectureBucket;
-    
+
     List<Student> studentList;
     private Student _activeStudent;
     private List<RequirementBase> _requirements;
     private Queue<Student> _nextStudentQueue;
-    
+
     private UILecture _holdingLectureComponent;
     private GameObject _ghostGraphic;
     private bool _isScheduleDroppable, _isTrashDroppable;
@@ -41,10 +41,22 @@ public class GameLogicManager : MonoBehaviour
     private void Start()
     {
         _lectureJson = Resources.Load<TextAsset>("lectures");
-        
+
         // Load lecture
         _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
-        
+
+        LoadStudent();
+    }
+
+    private void LoadStudent()
+    {
+        var studentJson = Resources.Load<TextAsset>("students");
+        var studentNames = JsonConvert.DeserializeObject<List<string>>(studentJson.text);
+        for (int i = 0; i < studentNames.Count; i++)
+        {
+            studentList.Add(new Student(studentNames[i], i));
+        }
+        _activeStudent = studentList[0];
     }
 
     private void Update()
@@ -86,7 +98,7 @@ public class GameLogicManager : MonoBehaviour
     {
         if (lectureBucket.IsFull)
             return false;
-        
+
         lectureBucket.ReserveLecture(lecture);
         return true;
     }
@@ -114,7 +126,7 @@ public class GameLogicManager : MonoBehaviour
     public async UniTaskVoid TrySelectHoldingLecture()
     {
         var lecture = _holdingLectureComponent.Lecture;
-        
+
         if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= _activeStudent.GetStudentMaxCredit())
         {
             var succeed = await schedule.StartLectureKeyAction(lecture);
