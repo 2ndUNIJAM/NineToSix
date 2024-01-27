@@ -15,18 +15,15 @@ public class GameLogicManager : MonoBehaviour
     public bool IsOnAction => _isOnAction;
 
     [SerializeField] private UICurrentStudent currentStudent;
-    [SerializeField] private UINextStudent nextStudentTemplate;
-    [SerializeField] private RectTransform nextStudentParent;
+    [SerializeField] private UINextStudent nextStudent1, nextStudent2;
     [SerializeField] private UISchedule schedule;
     [SerializeField] private UILectureSpawner lectureSpawner;
     [SerializeField] private UILectureBucket lectureBucket;
     [SerializeField] private GameObject actionDimmer;
     
     List<Student> studentList;
-    private Student _activeStudent;
-    private List<RequirementBase> _requirements;
-    private Queue<Student> _nextStudentQueue;
-    
+    private int _activeStudentIndex;
+
     private UILecture _holdingLectureComponent;
     private TextAsset _lectureJson;
     private List<LectureData> _lectureData;
@@ -43,15 +40,39 @@ public class GameLogicManager : MonoBehaviour
     private void Start()
     {
         _lectureJson = Resources.Load<TextAsset>("lectures");
-        
+
         // Load lecture
         _lectureData = JsonConvert.DeserializeObject<List<LectureData>>(_lectureJson.text);
-        
+
+        LoadStudent();
+        VisualizeStudent();
     }
 
-    public void GetCurrentStudent(Student student)
+    private void LoadStudent()
     {
-        student = studentList[0];
+        var studentJson = Resources.Load<TextAsset>("students");
+        var studentNames = JsonConvert.DeserializeObject<List<string>>(studentJson.text);
+        studentList = new List<Student>();
+        for (int i = 0; i < studentNames.Count; i++)
+        {
+            studentList.Add(new Student(studentNames[i], i));
+        }
+        _activeStudentIndex = 0;
+    }
+
+    private void VisualizeStudent()
+    {
+        currentStudent.SetStudent(studentList[_activeStudentIndex]);
+
+        if (_activeStudentIndex + 1 < studentList.Count)
+            nextStudent1.SetStudent(studentList[_activeStudentIndex + 1]);
+        else
+            nextStudent1.gameObject.SetActive(false);
+
+        if (_activeStudentIndex + 2 < studentList.Count)
+            nextStudent2.SetStudent(studentList[_activeStudentIndex + 2]);
+        else
+            nextStudent2.gameObject.SetActive(false);
     }
 
     public IEnumerable<Lecture> GetSelectedLectures()
@@ -63,7 +84,7 @@ public class GameLogicManager : MonoBehaviour
     {
         if (lectureBucket.IsFull)
             return false;
-        
+
         lectureBucket.ReserveLecture(lecture);
         return true;
     }
@@ -88,7 +109,7 @@ public class GameLogicManager : MonoBehaviour
     public async UniTaskVoid TrySelectHoldingLecture()
     {
         var lecture = _holdingLectureComponent.Lecture;
-        
+
         if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= 18)
         {
             _isOnAction = true;

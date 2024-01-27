@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class UINextStudent : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Image studentImage;
+    [SerializeField] private TextMeshProUGUI studentName;
+    [SerializeField] private TextMeshProUGUI studentDept;
 
-    // Update is called once per frame
-    void Update()
+    public void SetStudent(Student student)
     {
-        
+        studentImage.sprite = student.GetStudentProfile();
+        studentName.text = student.GetStudentName();
+        studentDept.text = $"{student.GetStudentDepartment()} {student.GetStudentGrade()}학년";
     }
 }

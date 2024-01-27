@@ -12,6 +12,7 @@ public class ReqAverageRating : RequirementBase
         base.GetLogicManager();
 
         reqAverageRating = Random.Range(4, 9) / 2f; // 2,2.5, 3, 3.5, 4 중 하나
+        contentTitle = $"교수 평균 평점 {reqAverageRating}점 이상";
     }
 
     public override bool DoesMeetRequirement()
@@ -29,10 +30,4 @@ public class ReqAverageRating : RequirementBase
         if (finalAverageRating >= reqAverageRating) return true;
         else return false;
     }
-
-    public override string ToString()
-    {
-        return $"교수 평균 평점 {reqAverageRating}점 이상";
-    }
-
 }
