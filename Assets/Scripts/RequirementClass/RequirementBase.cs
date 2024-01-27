@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public abstract class RequirementBase : MonoBehaviour
+public abstract class RequirementBase
 {
-    [SerializeField] protected string contentTitle;
     [SerializeField] protected GameLogicManager gLogicManager;
+    public string contentTitle;
     public abstract bool DoesMeetRequirement();
     public void GetLogicManager()
     {
         GameObject gLogicManagerObj = GameObject.Find("GameLogicManager");
         gLogicManager = gLogicManagerObj.GetComponent<GameLogicManager>();
     }
-
 }

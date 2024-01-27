@@ -4,13 +4,13 @@ using System.ComponentModel.Design;
 using UnityEngine;
 
 public class ReqLectureNumber : RequirementBase
-// 특정 분야 n과목 필수 요구사항 클래스
+// 특정 분야 n과목 이상 필수 요구사항 클래스
 {
     ELectureType reqLectureType;
     [SerializeField] int reqNumLectures; // 필요 과목 수
 
     // Start is called before the first frame update
-    void Start()
+    public ReqLectureNumber()
     {
         base.GetLogicManager();
 
@@ -31,20 +31,20 @@ public class ReqLectureNumber : RequirementBase
                 break;
         }
         reqNumLectures = Random.Range(1, 3);
-        contentTitle = string.Format("{0} {1} 과목 필수 신청", type, reqNumLectures);
+        contentTitle = $"{type} {reqNumLectures} 과목 필수 신청";
     }
-    
+
     override public bool DoesMeetRequirement()
     {
         int numOKLectures = 0;
-        foreach(Lecture lecture in gLogicManager.GetSelectedLectures())
+        foreach (Lecture lecture in gLogicManager.GetSelectedLectures())
         {
-            if(lecture.Data.Type == reqLectureType)
+            if (lecture.Data.Type == reqLectureType)
             {
                 ++numOKLectures;
             }
         }
-        if (numOKLectures == reqNumLectures) return true;
+        if (numOKLectures >= reqNumLectures) return true;
         else return false;
     }
 

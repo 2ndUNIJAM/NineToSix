@@ -9,7 +9,7 @@ public class ReqMustLecture : RequirementBase
     int currentStudentGrade;
 
     // Start is called before the first frame update
-    void Start()
+    public ReqMustLecture()
     {
         base.GetLogicManager();
     }
