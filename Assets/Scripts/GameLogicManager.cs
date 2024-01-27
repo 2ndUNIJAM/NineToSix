@@ -22,6 +22,7 @@ public class GameLogicManager : MonoBehaviour
     [SerializeField] private UILectureSpawner lectureSpawner;
     [SerializeField] private UILectureBucket lectureBucket;
     [SerializeField] private GameObject actionDimmer;
+    [SerializeField] private RankingData rankingData;
 
     List<Student> studentList;
     private int _activeStudentIndex;
@@ -176,9 +177,11 @@ public class GameLogicManager : MonoBehaviour
 
 
         // 조건: activestudentIndex+1, studentList length  초과 시 게임 종료
-        if(++_activeStudentIndex >= studentList.Count) 
+        if (++_activeStudentIndex >= studentList.Count)
         {
             // 게임 종료
+            rankingData.AddRanking(_currentScore);
+            GameManager.Instance.Quit();
         }
         else
         {

@@ -22,6 +22,7 @@ public class TitleSceneManager : MonoBehaviour
     [SerializeField] private Button startButton;
     [SerializeField] private TMP_InputField nicknameInput;
     [SerializeField] private List<PopupButton> popupButtonList;
+    [SerializeField] private RankingData rankingData;
     private string nickname;
     private const string gameScene = "GameScene";
 
@@ -51,6 +52,7 @@ public class TitleSceneManager : MonoBehaviour
         if (nickname == null || nickname.Length == 0)
             return;
 
+        rankingData.SetPlayerName(nickname);
         GameManager.Instance.ChangeToScene(gameScene);
     }
 }
