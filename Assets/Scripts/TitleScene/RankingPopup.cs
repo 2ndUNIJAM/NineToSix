@@ -28,6 +28,7 @@ public class RankingPopup : Popup
 
     private void GenerateRanking()
     {
+        rankingData.Load();
         var sortedRanking = rankingData.GetDescendingRanking();
         first.gameObject.SetActive(sortedRanking.Count() > 0);
 
@@ -66,7 +67,6 @@ public class RankingPopup : Popup
         currentPage += diff;
         rankingPageList[currentPage].gameObject.SetActive(true);
 
-        Debug.Log($"Left: {currentPage > 0}, Right : {currentPage + 1 < rankingPageList.Count}");
         left.gameObject.SetActive(currentPage > 0);
         right.gameObject.SetActive(currentPage + 1 < rankingPageList.Count);
     }
