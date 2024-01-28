@@ -204,7 +204,6 @@ public class GameLogicManager : MonoBehaviour
             _holdingLectureComponent.Remove(false);
             currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
 
-            // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
             switch(lecture.Credit)
             {
                 case 1:
@@ -217,13 +216,16 @@ public class GameLogicManager : MonoBehaviour
                     AddScore(5);
                     break;
             }
+
+            // 1 2 3 4 -> 0 1 2 3 -> 1 2 4 8 
+            int bitMask = 1 << (studentList[_activeStudentIndex].GetStudentGrade() - 1);
+            if (((int)lecture.Data.TargetGrade & bitMask) != 0)
+            {
+                AddScore(2);
+            }
+
             SoundManager.Instance.PlaySound(EBGMType.PutLecture);
         }
-/*            else
-            {
-                // 과목의 수강신청 확정을 실패했을 경우 -5
-                AddScore(-5);
-            }*/
 
         UnholdLecture();
         actionDimmer.SetActive(false);
