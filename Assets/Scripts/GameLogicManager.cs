@@ -141,6 +141,8 @@ public class GameLogicManager : MonoBehaviour
         _selectedLectures.Remove(lecture);
         AddCredit(-lecture.Credit);
         AddScore(-8);
+
+        SoundManager.Instance.PlaySound(EBGMType.RemoveLecture);
     }
 
     public IEnumerable<LectureData> GetLectureData()
@@ -317,11 +319,15 @@ public class GameLogicManager : MonoBehaviour
     private void EndGame()
     {
         _isGameEnded = true;
+
         SoundManager.Instance.StopSound(EBGMType.GameOverImminent);
+        SoundManager.Instance.StopSound(EBGMType.InGameBGM);
+        SoundManager.Instance.PlaySound(EBGMType.EndGameAlarm);
 
         rankingData.AddRanking(_currentScore, _confirmCount);
         gameEnd.gameObject.SetActive(true);
         gameEnd.Init(rankingData);
         gamePanel.SetActive(false);
+
     }
 }

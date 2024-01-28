@@ -17,7 +17,8 @@ public enum EBGMType // Resources/Sound 폴더 내 파일과 일치해야 함
     SerialHit3,
     SerialHitFail,
     StartMenuBGM, // 10
-    InGameBGM // 11
+    InGameBGM, 
+    EndGameAlarm // 12
 }
 
 public class SoundManager : MonoBehaviour
@@ -61,7 +62,7 @@ public class SoundManager : MonoBehaviour
         speakers = new GameObject[soundEffects.Length];
         for(int i=0; i<soundEffects.Length; ++i)
         {
-            speakers[i] = Instantiate(Resources.Load<GameObject>("Prefabs/Speaker"));
+            speakers[i] = Instantiate(Resources.Load<GameObject>("Prefabs/Speaker"), transform);
         }
 
         for (int i = 0; i < speakers.Length; ++i)
