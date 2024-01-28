@@ -105,7 +105,7 @@ public class RankingData : ScriptableObject
     public void Save()
     {
         var saveData = JsonConvert.SerializeObject(ranking);
-        File.WriteAllText(Application.dataPath + $"/Resources/ranking.json", saveData);
+        File.WriteAllText(Application.persistentDataPath + $"/Resources/ranking.json", saveData);
     }
 
     public void Load()
