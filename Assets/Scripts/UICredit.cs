@@ -16,5 +16,9 @@ public class UICredit : MonoBehaviour
     public void UpdateCredit(int currentCredit)
     {
         textCredit.text = $"{currentCredit} / {this.maxCredit}";
+        if ((maxCredit - currentCredit) <= 2)
+            textCredit.color = Color.red;
+        else
+            textCredit.color = Color.black;
     }
 }
