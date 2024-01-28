@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
 public class GameLogicManager : MonoBehaviour
@@ -174,44 +175,59 @@ public class GameLogicManager : MonoBehaviour
     public async UniTaskVoid TrySelectHoldingLecture()
     {
         var lecture = _holdingLectureComponent.Lecture;
-
-        if (schedule.IsLectureAvailable(lecture) && _currentCredit + lecture.Credit <= studentList[_activeStudentIndex].GetStudentMaxCredit())
+        
+        // 동일 강좌를 중복 신청할 수 없습니다.
+        foreach(var lec in _selectedLectures)
         {
-            _isOnAction = true;
-            actionDimmer.SetActive(true);
-            var succeed = await schedule.StartLectureKeyAction(lecture);
-            if (succeed)
+            if (lec.Data.ID == lecture.Data.ID)
             {
-                AddCredit(lecture.Credit);
-                _selectedLectures.Add(lecture);
-                _holdingLectureComponent.Remove(false);
-                currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
-
-                // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
-                switch(lecture.Credit)
-                {
-                    case 1:
-                        AddScore(2);
-                        break;
-                    case 2:
-                        AddScore(3);
-                        break;
-                    case 3:
-                        AddScore(5);
-                        break;
-                }
-                SoundManager.Instance.PlaySound(EBGMType.PutLecture);
+                UnholdLecture();
+                return;
             }
+        }
+
+        // 스케쥴에 안 맞거나 학점에 안 맞으면 신청할 수 없습니다.
+        if (!schedule.IsLectureAvailable(lecture) ||
+            _currentCredit + lecture.Credit > studentList[_activeStudentIndex].GetStudentMaxCredit())
+        {
+            UnholdLecture();
+            return;
+        }
+            
+        _isOnAction = true;
+        actionDimmer.SetActive(true);
+        var succeed = await schedule.StartLectureKeyAction(lecture);
+        if (succeed)
+        {
+            AddCredit(lecture.Credit);
+            _selectedLectures.Add(lecture);
+            _holdingLectureComponent.Remove(false);
+            currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
+
+            // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
+            switch(lecture.Credit)
+            {
+                case 1:
+                    AddScore(2);
+                    break;
+                case 2:
+                    AddScore(3);
+                    break;
+                case 3:
+                    AddScore(5);
+                    break;
+            }
+            SoundManager.Instance.PlaySound(EBGMType.PutLecture);
+        }
 /*            else
             {
-                // 과목의 수강신청 확정을 실패했을 경우 -5 
+                // 과목의 수강신청 확정을 실패했을 경우 -5
                 AddScore(-5);
             }*/
 
-            UnholdLecture();
-            actionDimmer.SetActive(false);
-            _isOnAction = false;
-        }
+        UnholdLecture();
+        actionDimmer.SetActive(false);
+        _isOnAction = false;
     }
 
     public void ConfirmSchedule() 
@@ -265,6 +281,7 @@ public class GameLogicManager : MonoBehaviour
 
             // 시간표 클리어 UISchedule.cs에 ClearSlots
             schedule.ClearSlots();
+            _selectedLectures.Clear();
 
             // 수강학점 초기화
             _currentCredit = 0;

@@ -104,6 +104,8 @@ public class UIScheduleSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         if (!_filled)
             return;
+        if (eventData.pointerDrag != null)
+            return;
         
         tooltip.Show(_fillingLecture);
     }
@@ -111,6 +113,8 @@ public class UIScheduleSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void OnPointerExit(PointerEventData eventData)
     {
         if (!_filled)
+            return;
+        if (eventData.pointerDrag != null)
             return;
 
         tooltip.Hide();
