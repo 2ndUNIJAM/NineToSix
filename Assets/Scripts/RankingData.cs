@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-[Serializable]
+[System.Serializable]
 public class PlayerData
 {
     public string PlayerName;
@@ -22,6 +22,8 @@ public class PlayerData
 public class RankingEditor : Editor
 {
     private RankingData rankingData;
+    private int generateAmount;
+
     private void OnEnable()
     {
         rankingData = target as RankingData;
@@ -31,6 +33,23 @@ public class RankingEditor : Editor
         base.OnInspectorGUI();
         if (GUILayout.Button("Clear Ranking"))
             rankingData.Clear();
+        if (GUILayout.Button("Generate Random Player Data"))
+            GenerateRandomPlayer(generateAmount);
+        generateAmount = EditorGUILayout.IntField("Generate Amount", generateAmount);
+    }
+
+    private void GenerateRandomPlayer(int amount = 1)
+    {
+        for (int iter = 0; iter < amount; iter++)
+        {
+            var nameLength = Random.Range(4, 9);
+            var sb = new StringBuilder();
+            for (int i = 0; i < nameLength; i++)
+            {
+                sb.Append((char)Random.Range((int)'a', (int)'z' + 1));
+            }
+            rankingData.AddRanking(sb.ToString(), Random.Range(0, 1001), Random.Range(0, 11));
+        }
     }
 }
 
@@ -50,6 +69,11 @@ public class RankingData : ScriptableObject
     public void AddRanking(int score, int count)
     {
         ranking.Add(new PlayerData(this.playerName, score, count));
+    }
+
+    public void AddRanking(string name, int score, int count)
+    {
+        ranking.Add(new PlayerData(name, score, count));
     }
 
     public IEnumerable<PlayerData> GetDescendingRanking()

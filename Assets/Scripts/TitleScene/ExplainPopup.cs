@@ -6,24 +6,26 @@ public class ExplainPopup : Popup
 {
     [SerializeField] private Button left, right;
     [SerializeField] private List<GameObject> imageList;
-    private GameObject currentImage;
-    private int currentIndex = 0;
+    private int currentIndex;
     protected override void StartAction()
     {
         base.StartAction();
-        left.onClick.AddListener(() => ShowImage(--currentIndex));
-        right.onClick.AddListener(() => ShowImage(++currentIndex));
-        ShowImage(0);
+        left.onClick.AddListener(() => ChangeImage(-1));
+        right.onClick.AddListener(() => ChangeImage(1));
+        currentIndex = 0;
+        ChangeImage(0);
     }
 
-    private void ShowImage(int index)
+    private void ChangeImage(int diff)
     {
-        if (currentIndex >= imageList.Count || currentIndex < 0)
+        if (currentIndex + diff >= imageList.Count || currentIndex + diff < 0)
             return;
 
-        if (currentImage != null)
-            currentImage.SetActive(false);
-        imageList[index].SetActive(true);
-        currentImage = imageList[index];
+        imageList[currentIndex].SetActive(false);
+        currentIndex += diff;
+        imageList[currentIndex].SetActive(true);
+
+        left.gameObject.SetActive(currentIndex > 0);
+        right.gameObject.SetActive(currentIndex + 1 < imageList.Count);
     }
 }
