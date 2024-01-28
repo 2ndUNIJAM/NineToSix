@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     private string _currentScene;
     private Stack<string> _sceneHistory;
 
-    private const float SceneChangeDelay = 0.5f;
+    private const float SceneChangeDelay = 0f;
 
     private void Awake()
     {
