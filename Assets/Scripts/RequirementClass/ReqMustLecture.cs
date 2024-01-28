@@ -33,7 +33,8 @@ public class ReqMustLecture : RequirementBase
         {
             if (lecture.Data.Name.Equals(requiredLectureName))
             {
-                gLogicManager.LectureSpawner.ReturnGuaranteedLectureToPool();
+                if (gLogicManager.LectureSpawner.GuaranteedLectureExists)
+                    gLogicManager.LectureSpawner.ReturnGuaranteedLectureToPool();
                 return true;
             }
         }

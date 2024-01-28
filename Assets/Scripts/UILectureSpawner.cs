@@ -25,7 +25,7 @@ public class UILectureSpawner : MonoBehaviour
     private bool _guaranteedLectureExists;
     private int _guaranteedCoefficient = 1;
 
-    private const int GuaranteedPercentageStep = 25;
+    private const int GuaranteedPercentageStep = 10;
 
     private void Awake()
     {
@@ -62,9 +62,10 @@ public class UILectureSpawner : MonoBehaviour
 
     public void SetGuaranteedLecture(int id)
     {
-        var index = _majorReqs.FindIndex(x => x.ID == id);
-        _guaranteedLecture = _majorReqs[index]; // Error Code. ArgumentOutofRangeException
-        _majorReqs.RemoveAt(index);
+        _guaranteedLecture = _lectureData.Find(x => x.ID == id);
+        var index = _majorReqs.FindIndex(x => x.ID == _guaranteedLecture.ID);
+        if (index >= 0)
+            _majorReqs.RemoveAt(index);
         _guaranteedLectureExists = true;
     }
 
