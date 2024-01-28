@@ -188,6 +188,9 @@ public class UISchedule : MonoBehaviour, IDropHandler
         foreach (var schedulePos in lecture.Schedule)
             _slots[schedulePos.x, schedulePos.y].Clear();
         _actioningLecture = null;
+
+        SoundManager.Instance.ResetSerialHitCount();
+
         return false;
         
         void InitializeKeyAction()
