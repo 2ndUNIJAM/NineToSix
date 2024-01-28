@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 using Newtonsoft.Json;
 using Unity.VisualScripting;
 using Random = UnityEngine.Random;
@@ -30,9 +31,10 @@ public class GameLogicManager : MonoBehaviour
     [SerializeField] private UITimer timer;
     [SerializeField] private UICredit credit;
     [SerializeField] private UIGameEnd gameEnd;
-    [SerializeField] private GameObject actionDimmer;
+    [SerializeField] private GameObject actionDimmer, gamePanel;
     [SerializeField] private RankingData rankingData;
-    [SerializeField] private GameObject gamePanel;
+    [SerializeField] private ReturnPopup returnPopup;
+    [SerializeField] private Button returnButton;
 
     List<Student> studentList;
     private int _activeStudentIndex;
@@ -65,6 +67,7 @@ public class GameLogicManager : MonoBehaviour
         _currentScore = 0;
         _currentAbsoluteTime = 0;
         score.Initialize();
+        returnButton.onClick.AddListener(() => returnPopup.gameObject.SetActive(true));
     }
 
     private void Update()
