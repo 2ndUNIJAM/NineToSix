@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
@@ -140,7 +140,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
         SoundManager.Instance.SetMaxSerialHitCount(lecture.Credit);
         while (elapsedTime < 3f)
         {
-            if (Input.anyKeyDown)
+            if (KeyboardInputExists())
             {
                 var currentKey = KeyCode.None;
                 foreach (var keyCode in keyActionSlots.Keys)
@@ -166,7 +166,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
                     
                     SoundManager.Instance.PlaySound(EBGMType.SerialHitFail); // 딜레이 느림. 수정 필요 
                     SoundManager.Instance.ResetSerialHitCount();
-                    await UniTask.WaitForSeconds(0.5f);
+                    await UniTask.WaitForSeconds(0.5f, cancellationToken: this.GetCancellationTokenOnDestroy());
 
                     InitializeKeyAction();
                 }
@@ -182,7 +182,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
             }
 
             elapsedTime += Time.deltaTime;
-            await UniTask.Yield();
+            await UniTask.Yield(cancellationToken: this.GetCancellationTokenOnDestroy());
         }
 
         foreach (var schedulePos in lecture.Schedule)
@@ -203,6 +203,15 @@ public class UISchedule : MonoBehaviour, IDropHandler
             }
             keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
             elapsedTime = 0;
+        }
+
+        bool KeyboardInputExists()
+        {
+            return Time.timeScale >= 0.5f &&
+                   Input.anyKeyDown &&
+                   !Input.GetMouseButtonDown(0) &&
+                   !Input.GetMouseButtonDown(1) &&
+                   !Input.GetMouseButtonDown(2);
         }
     }
 
