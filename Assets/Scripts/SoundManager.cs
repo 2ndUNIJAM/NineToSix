@@ -69,8 +69,13 @@ public class SoundManager : MonoBehaviour
             speakers[i].GetComponent<AudioSource>().clip = soundEffects[i];
         }
 
+
         speakers[(int)EBGMType.StartMenuBGM].GetComponent<AudioSource>().loop = true;
+        speakers[(int)EBGMType.StartMenuBGM].GetComponent<AudioSource>().volume = 0.5f;
+
         speakers[(int)EBGMType.InGameBGM].GetComponent<AudioSource>().loop = true;
+        speakers[(int)EBGMType.InGameBGM].GetComponent<AudioSource>().volume = 0.5f;
+
         speakers[(int)EBGMType.GameOverImminent].GetComponent<AudioSource>().loop = true;
 
         serialHitCount = 0;

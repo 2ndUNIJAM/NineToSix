@@ -163,10 +163,11 @@ public class UISchedule : MonoBehaviour, IDropHandler
                 {
                     foreach (var schedulePos in lecture.Schedule)
                         _slots[schedulePos.x, schedulePos.y].ShowFailedKeyAction();
-                    await UniTask.WaitForSeconds(0.5f);
-
+                    
                     SoundManager.Instance.PlaySound(EBGMType.SerialHitFail); // 딜레이 느림. 수정 필요 
                     SoundManager.Instance.ResetSerialHitCount();
+                    await UniTask.WaitForSeconds(0.5f);
+
                     InitializeKeyAction();
                 }
             }
