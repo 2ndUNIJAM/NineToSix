@@ -35,6 +35,13 @@ public class TitleSceneManager : MonoBehaviour
 
         nicknameInput.onValueChanged.AddListener(UpdateNickname);
         startButton.onClick.AddListener(TryStartGame);
+        
+        SoundManager.Instance.PlaySound(EBGMType.StartMenuBGM);
+    }
+
+    private void OnDestroy()
+    {
+        SoundManager.Instance.StopSound(EBGMType.StartMenuBGM);
     }
 
     private void ActivatePopup(Popup popup)

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
@@ -165,7 +166,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
                     
                     SoundManager.Instance.PlaySound(EBGMType.SerialHitFail); // 딜레이 느림. 수정 필요 
                     SoundManager.Instance.ResetSerialHitCount();
-                    await UniTask.WaitForSeconds(0.5f);
+                    await UniTask.WaitForSeconds(0.5f, cancellationToken: this.GetCancellationTokenOnDestroy());
 
                     InitializeKeyAction();
                 }
@@ -181,7 +182,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
             }
 
             elapsedTime += Time.deltaTime;
-            await UniTask.Yield();
+            await UniTask.Yield(cancellationToken: this.GetCancellationTokenOnDestroy());
         }
 
         foreach (var schedulePos in lecture.Schedule)

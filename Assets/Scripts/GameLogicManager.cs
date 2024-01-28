@@ -67,6 +67,8 @@ public class GameLogicManager : MonoBehaviour
         _currentAbsoluteTime = 0;
         score.Initialize();
         returnButton.onClick.AddListener(() => returnPopup.gameObject.SetActive(true));
+        
+        SoundManager.Instance.PlaySound(EBGMType.InGameBGM);
     }
 
     private void Update()
@@ -82,6 +84,11 @@ public class GameLogicManager : MonoBehaviour
         {
             SoundManager.Instance.PlaySound(EBGMType.GameOverImminent);
         }
+    }
+
+    private void OnDestroy()
+    {
+        SoundManager.Instance.StopSound(EBGMType.InGameBGM);
     }
 
     private void LoadLecture()
