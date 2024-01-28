@@ -80,7 +80,7 @@ public class GameLogicManager : MonoBehaviour
         {
             EndGame();
         }
-        else if (_currentAbsoluteTime > 260 && !SoundManager.Instance.IsPlaying(EBGMType.GameOverImminent))
+        else if (!_isGameEnded && _currentAbsoluteTime > 260 && !SoundManager.Instance.IsPlaying(EBGMType.GameOverImminent))
         {
             SoundManager.Instance.PlaySound(EBGMType.GameOverImminent);
         }
