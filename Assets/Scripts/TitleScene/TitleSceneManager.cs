@@ -49,7 +49,7 @@ public class TitleSceneManager : MonoBehaviour
 
     private void TryStartGame()
     {
-        if (nickname == null || nickname.Length == 0)
+        if (nickname == null || nickname.Length == 0 || nickname.Length > 10)
             return;
 
         rankingData.SetPlayerName(nickname);
