@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
+using System.IO;
 
 [System.Serializable]
 public class PlayerData
@@ -18,6 +20,7 @@ public class PlayerData
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(RankingData))]
 public class RankingEditor : Editor
 {
@@ -52,6 +55,7 @@ public class RankingEditor : Editor
         }
     }
 }
+#endif
 
 [CreateAssetMenu(fileName = "RankingData", menuName = "Data/RankingData")]
 public class RankingData : ScriptableObject
@@ -96,5 +100,17 @@ public class RankingData : ScriptableObject
     public PlayerData GetLast()
     {
         return ranking.Last();
+    }
+
+    public void Save()
+    {
+        var saveData = JsonConvert.SerializeObject(ranking);
+        File.WriteAllText(Application.dataPath + $"/Resources/ranking.json", saveData);
+    }
+
+    public void Load()
+    {
+        var saveData = Resources.Load<TextAsset>("ranking");
+        ranking = JsonConvert.DeserializeObject<List<PlayerData>>(saveData.text);
     }
 }

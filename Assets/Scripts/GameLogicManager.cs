@@ -67,7 +67,7 @@ public class GameLogicManager : MonoBehaviour
         _currentAbsoluteTime = 0;
         score.Initialize();
         returnButton.onClick.AddListener(() => returnPopup.gameObject.SetActive(true));
-        
+
         SoundManager.Instance.PlaySound(EBGMType.InGameBGM);
     }
 
@@ -328,6 +328,6 @@ public class GameLogicManager : MonoBehaviour
         gameEnd.gameObject.SetActive(true);
         gameEnd.Init(rankingData);
         gamePanel.SetActive(false);
-
+        rankingData.Save();
     }
 }
