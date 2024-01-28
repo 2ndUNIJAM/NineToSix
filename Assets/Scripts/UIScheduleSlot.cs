@@ -21,7 +21,6 @@ public class UIScheduleSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private float _keyActionTimeLimit, _keyActionElapsedTime;
     private bool _filled, _isOnKeyAction;
     private Color _fillColor = Color.white;
-    private Tween _tween;
     private Lecture _fillingLecture;
 
     private void Update()
@@ -36,18 +35,13 @@ public class UIScheduleSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void StartPreview(Color color)
     {
         if (_filled)
-            _tween = DOTween.Sequence()
-                .Append(colorGraphic.DOColor(Color.black, 0.3f).SetEase(Ease.InCubic))
-                .Append(colorGraphic.DOColor(_fillColor, 0.3f).SetEase(Ease.OutCubic))
-                .SetLoops(-1).Play();
+            colorGraphic.color = Color.grey;
         else
             colorGraphic.color = new Color(color.r, color.g, color.b, 0.5f);
     }
 
     public void StopPreview()
     {
-        if (_tween != null && _tween.active)
-            _tween.Kill();
         colorGraphic.color = _fillColor;
     }
 
@@ -89,9 +83,6 @@ public class UIScheduleSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void Clear()
     {
-        if (_tween != null && _tween.active)
-            _tween.Kill();
-        
         _filled = false;
         _fillColor = Color.white;
         _isOnKeyAction = false;
