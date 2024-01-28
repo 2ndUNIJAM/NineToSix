@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Newtonsoft.Json;
-using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
 public class GameLogicManager : MonoBehaviour
@@ -41,7 +40,7 @@ public class GameLogicManager : MonoBehaviour
     private TextAsset _lectureJson;
     private List<LectureData> _lectureData;
     private List<Lecture> _selectedLectures;
-    private bool _isOnAction;
+    private bool _isOnAction, _isGameEnded;
 
     private int _currentCredit, _currentScore, _confirmCount;
     private float _currentAbsoluteTime;
@@ -72,7 +71,7 @@ public class GameLogicManager : MonoBehaviour
         _currentAbsoluteTime += Time.deltaTime;
         timer.UpdateTime(_currentAbsoluteTime);
 
-        if (_currentAbsoluteTime >= timeLimit)
+        if (!_isGameEnded && _currentAbsoluteTime >= timeLimit)
         {
             EndGame();
         }
@@ -130,6 +129,7 @@ public class GameLogicManager : MonoBehaviour
     public void RemoveSelectedLecture(Lecture lecture)
     {
         _selectedLectures.Remove(lecture);
+        AddCredit(-lecture.Credit);
         AddScore(-8);
     }
 
@@ -304,6 +304,7 @@ public class GameLogicManager : MonoBehaviour
 
     private void EndGame()
     {
+        _isGameEnded = true;
         SoundManager.Instance.StopSound(EBGMType.GameOverImminent);
 
         rankingData.AddRanking(_currentScore, _confirmCount);
