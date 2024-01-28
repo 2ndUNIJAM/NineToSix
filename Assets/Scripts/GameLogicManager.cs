@@ -213,7 +213,8 @@ public class GameLogicManager : MonoBehaviour
         {
             AddCredit(lecture.Credit);
             _selectedLectures.Add(lecture);
-            _holdingLectureComponent.Remove(false);
+            if (_holdingLectureComponent)
+                _holdingLectureComponent.Remove(false);
             currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
 
             // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
