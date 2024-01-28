@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -140,7 +139,7 @@ public class UISchedule : MonoBehaviour, IDropHandler
         SoundManager.Instance.SetMaxSerialHitCount(lecture.Credit);
         while (elapsedTime < 3f)
         {
-            if (Input.anyKeyDown)
+            if (KeyboardInputExists())
             {
                 var currentKey = KeyCode.None;
                 foreach (var keyCode in keyActionSlots.Keys)
@@ -203,6 +202,15 @@ public class UISchedule : MonoBehaviour, IDropHandler
             }
             keyCodes = new List<KeyCode> { KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D };
             elapsedTime = 0;
+        }
+
+        bool KeyboardInputExists()
+        {
+            return Time.timeScale >= 0.5f &&
+                   Input.anyKeyDown &&
+                   !Input.GetMouseButtonDown(0) &&
+                   !Input.GetMouseButtonDown(1) &&
+                   !Input.GetMouseButtonDown(2);
         }
     }
 
