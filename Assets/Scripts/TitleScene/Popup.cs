@@ -10,10 +10,24 @@ public class Popup : MonoBehaviour
         StartAction();
     }
 
+    private void OnEnable()
+    {
+        OnEnableAction();
+    }
+
+    private void OnDisable()
+    {
+        OnDisableAction();
+    }
+
     protected virtual void StartAction()
     {
         exit.onClick.AddListener(Exit);
     }
+
+    protected virtual void OnEnableAction() { }
+
+    protected virtual void OnDisableAction() { }
 
     private void Exit()
     {

@@ -11,14 +11,12 @@ public class UICredit : MonoBehaviour
     {
         this.maxCredit = maxCredit;
         textCredit.text = $"0 / {this.maxCredit}";
+        textCredit.color = Color.black;
     }
 
     public void UpdateCredit(int currentCredit)
     {
         textCredit.text = $"{currentCredit} / {this.maxCredit}";
-        if ((maxCredit - currentCredit) <= 2)
-            textCredit.color = Color.red;
-        else
-            textCredit.color = Color.black;
+        textCredit.color = (maxCredit - currentCredit) <= 2 ? Color.red : Color.black;
     }
 }
