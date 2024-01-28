@@ -175,9 +175,9 @@ public class GameLogicManager : MonoBehaviour
     public async UniTaskVoid TrySelectHoldingLecture()
     {
         var lecture = _holdingLectureComponent.Lecture;
-        
+
         // 동일 강좌를 중복 신청할 수 없습니다.
-        foreach(var lec in _selectedLectures)
+        foreach (var lec in _selectedLectures)
         {
             if (lec.Data.ID == lecture.Data.ID)
             {
@@ -193,7 +193,7 @@ public class GameLogicManager : MonoBehaviour
             UnholdLecture();
             return;
         }
-            
+
         _isOnAction = true;
         actionDimmer.SetActive(true);
         var succeed = await schedule.StartLectureKeyAction(lecture);
@@ -205,7 +205,7 @@ public class GameLogicManager : MonoBehaviour
             currentStudent.CheckRequirements(studentList[_activeStudentIndex]);
 
             // 과목의 수강신청 확정을 성공했을 경우(wsd같은거 눌러서) +10 
-            switch(lecture.Credit)
+            switch (lecture.Credit)
             {
                 case 1:
                     AddScore(2);
@@ -219,25 +219,25 @@ public class GameLogicManager : MonoBehaviour
             }
             SoundManager.Instance.PlaySound(EBGMType.PutLecture);
         }
-/*            else
-            {
-                // 과목의 수강신청 확정을 실패했을 경우 -5
-                AddScore(-5);
-            }*/
+        /*            else
+                    {
+                        // 과목의 수강신청 확정을 실패했을 경우 -5
+                        AddScore(-5);
+                    }*/
 
         UnholdLecture();
         actionDimmer.SetActive(false);
         _isOnAction = false;
     }
 
-    public void ConfirmSchedule() 
+    public void ConfirmSchedule()
     {
         // 15학점 미만인 경우 예외처리
-        if (_currentCredit < 15) return; 
+        if (_currentCredit < 15) return;
 
         _confirmCount++;
 
-        if(lectureSpawner.GuaranteedLectureExists)
+        if (lectureSpawner.GuaranteedLectureExists)
         {
             studentList[_activeStudentIndex].GetFirstRequirement().OnExit();
             studentList[_activeStudentIndex].GetSecondRequirement().OnExit();
@@ -249,7 +249,7 @@ public class GameLogicManager : MonoBehaviour
         int basicScore = 50; // 기본 점수
         float bonusScore = 1.5f; // 보너스 상수
         float reqWeight = studentList[_activeStudentIndex].GetLastRequirement().DoesMeetRequirement() ? 1.15f : 1; // 요구사항 가중치
-        int confirmScore = (int)((basicScore + Mathf.Pow(bonusScore, _currentCredit-15)) * reqWeight);
+        int confirmScore = (int)((basicScore + Mathf.Pow(bonusScore, _currentCredit - 15)) * reqWeight);
         AddScore(confirmScore);
 
         /*Debug.Log($"요구사항 T/F 디버그: {studentList[_activeStudentIndex].GetFirstRequirement().DoesMeetRequirement()} / " +
@@ -292,7 +292,7 @@ public class GameLogicManager : MonoBehaviour
     public void AddScore(int score)
     {
         _currentScore += score;
-        this.score.UpdateScore(_currentScore);
+        this.score.AddScore(score);
         Debug.Log($"AddScore Called with score: {score}");
     }
 
