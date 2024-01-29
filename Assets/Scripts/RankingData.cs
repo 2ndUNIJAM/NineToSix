@@ -63,7 +63,7 @@ public class RankingData : ScriptableObject
 
     [SerializeField] private string playerName;
     [SerializeField] private List<PlayerData> ranking;
-
+    private const string saveKey = "RANKING";
 
     public void SetPlayerName(string name)
     {
@@ -105,12 +105,17 @@ public class RankingData : ScriptableObject
     public void Save()
     {
         var saveData = JsonConvert.SerializeObject(ranking);
-        File.WriteAllText(Application.persistentDataPath + $"/Resources/ranking.json", saveData);
+        PlayerPrefs.SetString(saveKey, saveData);
     }
 
-    public void Load()
+    public void TryLoad()
     {
-        var saveData = Resources.Load<TextAsset>("ranking");
-        ranking = JsonConvert.DeserializeObject<List<PlayerData>>(saveData.text);
+        if (PlayerPrefs.HasKey(saveKey))
+        {
+            var saveData = PlayerPrefs.GetString(saveKey);
+            ranking = JsonConvert.DeserializeObject<List<PlayerData>>(saveData);
+        }
+        else
+            ranking = new List<PlayerData>();
     }
 }

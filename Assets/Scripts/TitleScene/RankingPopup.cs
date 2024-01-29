@@ -28,7 +28,6 @@ public class RankingPopup : Popup
 
     private void GenerateRanking()
     {
-        rankingData.Load();
         var sortedRanking = rankingData.GetDescendingRanking();
         first.gameObject.SetActive(sortedRanking.Count() > 0);
 

@@ -35,8 +35,9 @@ public class TitleSceneManager : MonoBehaviour
 
         nicknameInput.onValueChanged.AddListener(UpdateNickname);
         startButton.onClick.AddListener(TryStartGame);
-        
+
         SoundManager.Instance.PlaySound(EBGMType.StartMenuBGM);
+        rankingData.TryLoad();
     }
 
     private void OnDestroy()
